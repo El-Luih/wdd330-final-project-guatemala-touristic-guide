@@ -1,0 +1,39 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="62" fill="#87CEEB" stroke="#228B22" stroke-width="4"/>
+  
+  <!-- Mountain Silhouette (Volcanos) -->
+  <path d="M10 85 L25 60 L35 70 L50 45 L65 55 L80 35 L95 50 L110 40 L118 85 Z" fill="#228B22" opacity="0.8"/>
+  
+  <!-- Lake/Water -->
+  <ellipse cx="64" cy="90" rx="45" ry="12" fill="#FFFFFF" opacity="0.7"/>
+  
+  <!-- Maya Temple/Pyramid -->
+  <g transform="translate(54, 50)">
+    <!-- Temple base -->
+    <rect x="0" y="15" width="20" height="8" fill="#666"/>
+    <!-- Temple steps -->
+    <rect x="2" y="10" width="16" height="5" fill="#777"/>
+    <rect x="4" y="5" width="12" height="5" fill="#888"/>
+    <rect x="6" y="0" width="8" height="5" fill="#999"/>
+  </g>
+  
+  <!-- Quetzal Bird Silhouette -->
+  <g transform="translate(75, 25)">
+    <path d="M0 8 Q2 5 5 6 Q8 4 10 7 Q12 5 15 8 Q13 10 10 9 Q8 12 5 10 Q2 11 0 8 Z" fill="#228B22"/>
+    <!-- Bird tail -->
+    <path d="M12 8 Q15 12 18 10 Q16 14 12 12" fill="#228B22" opacity="0.7"/>
+  </g>
+  
+  <!-- Traditional Pattern Border -->
+  <circle cx="64" cy="64" r="58" fill="none" stroke="#228B22" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
+  
+  <!-- Sun/Light rays -->
+  <g transform="translate(64, 64)" stroke="#FFDD44" stroke-width="2" opacity="0.6">
+    <line x1="-35" y1="-35" x2="-30" y2="-30"/>
+    <line x1="0" y1="-40" x2="0" y2="-35"/>
+    <line x1="35" y1="-35" x2="30" y2="-30"/>
+    <line x1="40" y1="0" x2="35" y2="0"/>
+    <line x1="35" y1="35" x2="30" y2="30"/>
+  </g>
+</svg>
