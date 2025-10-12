@@ -14,7 +14,6 @@ export default defineConfig({
         destinations: resolve(__dirname, 'src/destinations/index.html'),
         events: resolve(__dirname, 'src/events/index.html'),
         favorites: resolve(__dirname, 'src/favorites/index.html'),
-        flights: resolve(__dirname, 'src/flights/index.html'),
       },
     },
   },

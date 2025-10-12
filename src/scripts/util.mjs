@@ -39,3 +39,43 @@ export async function loadHeaderFooter() {
 
     
 }
+
+export const googleKey = "AIzaSyA-Ip6-JCeCovgWWG6TijYI2SdLQdHTU84";
+
+export class ExternalData {
+    constructor(URL) {
+        this.sourceURL = URL; 
+        this.data;
+    }
+
+    async getData() {
+        try {
+            const response = await fetch(this.sourceURL);
+            if (!response.ok) {
+                console.error(`ExternalData.getData: network error ${response.status} ${response.statusText} for ${this.sourceURL}`);
+                return null;
+            }
+
+            let json;
+            try {
+                json = await response.json();
+            } catch (err) {
+                console.error(`ExternalData.getData: invalid JSON from ${this.sourceURL}:`, err);
+                return null;
+            }
+
+            // Accepts both direct array/object or a wrapper with `Result`.
+            const value = (json && Object.prototype.hasOwnProperty.call(json, 'Result')) ? json.Result : json;
+            if (value === undefined || value === null) {
+                console.warn(`ExternalData.getData: no data returned from ${this.sourceURL}`);
+                return null;
+            }
+
+            this.data = value;
+            return this.data;
+        } catch (err) {
+            console.error(`ExternalData.getData: fetch failed for ${this.sourceURL}:`, err);
+            return null;
+        }
+    }
+}

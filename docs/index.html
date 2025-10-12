@@ -24,13 +24,137 @@
       content="https://el-luih.github.io/wdd330-final-project-guatemala-touristic-guide/index.html"
     />
     <link rel="icon" href="images/favicon.ico" />
-    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/main-Cmg7qOUe.js"></script>
-    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-Z8NoXlbh.js">
+    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/main-B1PcHhn9.js"></script>
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-BPQblLgV.js">
     <link rel="stylesheet" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/main-B_XcEcZy.css">
   </head>
   <body>
-    <div id="dynamic-header"></div>
-    <h1>Hello c:</h1>
+    
+    <div id="dynamic-header"> 
+      <!--Dynamically generated header-->
+    </div>
+
+    <main class="main-page">
+      <!--The "main" class is used because this is the main page, not because of the semantic element.--> 
+      <article class="hero">
+        <picture>
+          <source srcset="" media=""> 
+          <img src="" alt="A collage of some of the most beautiful places in Guatemala">
+        </picture>
+        <h1 class="title">Discover Guatemala
+          <span class="flavor">Your gateway to breathtaking destinations, rich culture, and unforgettable experiences.</span>
+        </h1>
+      </article>
+      
+      <div class="search-module">
+        <!--Search module for the destinations "Feautred Destinations" gadget. Comes with a searchbar for places and filtering buttons for the country's regions.-->
+        <input id="searchbar" name="searchbar" type="text" placeholder="Search for atractions, parks, monuments...">
+        <div class="filtering-buttons">
+          <!--
+          + Dynamically generated filtering buttons.
+          + Includes an "All" button, which refers to the whole country.
+          -->
+        </div>
+      </div>
+
+      <div class="gadget-module">
+        <!--
+        A grid containing gadgets displaying information about the country's region selected 
+        in the filtering option or about Guatemala in general if no region or the "All" option were selcted.
+        -->
+        <section class="gadget destinations">
+          <!--
+          Displays 2-6 destinations of the region..
+          + Shows the result destinations of the region retrieved from the API when given the searchbar prompt.
+          + Defaults to the first items from a curated list of the most prominent destinations of the region
+          -->
+          <h2>Featured Destinations</h2>
+          <div class="destinations container">
+            <!--
+            Dynamically generated destination cards. Each destination card contains the following information:
+            + 1 image.
+            + 3 type tags of the place.
+            + Operational Status
+            + "Explore" button (redirects to the "Destinations" page with the place's expanded info card on display)
+            + "☆/★" favorite button (toggles favorite status)
+            -->
+          </div>
+        </section>
+        <div class="right">
+          <section class="gadget weather">
+            <!--
+            + Displays the 3-days weather forecast and the name of the selected region.
+            + Defaults to Ciudad de Guatemala (the capital) if no region is selected.
+            -->
+            <h2>Weather Forecast</h2>
+            <div id="weather-0">
+              <!--
+              Dynamically generated weather for today.
+              Contains:
+              + The day.
+              + Weather icon
+              + Temperature
+              -->
+            </div>
+            <div id="weather-1">
+              <!--
+              Dynamically generated weather for tomorrow.
+              Contains:
+              + The day.
+              + Weather icon
+              + Temperature
+              -->
+            </div>
+            <div id="weather-2">
+              <!--
+              Dynamically generated weather for the day after tomorrow.
+              Contains:
+              + The day.
+              + Weather icon
+              + Temperature
+              -->
+            </div>
+            <h3 id="weather-region">
+              <!--Dynamically generated region.-->
+            </h3>
+          </section>
+
+          <section class="gadget events">
+            <!--Display all the cultural events of the month in cards.-->
+            <h2>Cultural Events</h2>
+            <a class="explore button" href="events/index.html">Explore</a>
+            <div class="events container table">
+              <!--Dynamically generated events table. Each entry contains two columns.
+              Column 1:
+              + Event's name
+              + Event's descrption
+              Column 2:
+              + Event's date.
+
+              The left border of each row changes color depending on whether the event already passed or not.
+
+              ++++++I still need to decide if the selection of displayed events is region based or not.++++++
+              -->
+            </div>
+          </section>
+        </div>
+        <section class="gadget restaurants">
+          <h2>Local Cuisine</h2>
+          <a class="explore button" href="cuisine/index.html">Explore</a>
+          <div class="restaurants container">
+            <!--
+            Displays 4-6 dynamycally generated restaurant cards.
+            Each one contains:
+            + Restaurant logo
+            + Name
+            + 3 Type Tags
+            + 5-stars rating classification
+            + "☆/★" favorite button (toggles favorite status)
+            -->
+          </div>
+        </section>
+      </div>
+    </main>
     <div id="dynamic-footer"></div>
   </body>
 </html>
