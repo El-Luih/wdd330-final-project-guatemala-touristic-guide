@@ -33,6 +33,102 @@
   </head>
   <body>
     <div id="dynamic-header"></div>
+
+    <main class="favorites-page">
+      <article class="hero">
+        <picture>
+          <source srcset="" media=""> 
+          <img src="" alt="A collage of many famous touristic places and restaurants in Guatemala.">
+        </picture>
+        <h1 class="title">Discover Your Preference
+          <span class="flavor">Check the destinations and restaurants you have marked as your favorites before.</span>
+        </h1>
+      </article>
+
+      <div class="grid">
+        <!--Grid for the search module and the 2 different result columns for destinations and restaurants.-->
+        <div class="search-module">
+          <!--Spans 2 columns and 1 row.-->
+          <label for="searchbar">
+            <span class="field-name">Search</span>
+            <input id="searchbar" name="searchbar" type="text" placeholder="Search restaurants...">
+          </label>
+
+          <label for="regions">
+            <span class="field-name">Region</span>
+            <select name="regions" id="regions">
+              <!--
+              + Dynamically generated options, one for each region.
+              + Includes an "All Regions" option, selected by default.
+              -->
+            </select>
+          </label>
+
+          <fieldset class="status-filters">
+            <!--Operation status filters-->
+            <legend class="field-name">Status</legend>
+            <div class="grid radio">
+
+              <label for="all">
+                <span>All</span>
+                <input id="all" name="status" type="radio" value="all" checked>
+              </label>
+
+              <label for="open">
+                <span>Open</span>
+                <input id="open" name="status" type="radio" value="open">
+              </label>
+
+              <label for="closed">
+                <span>Closed</span>
+                <input id="closed" name="status" type="radio" value="closed">
+              </label>
+
+            </div>
+          </fieldset>
+        </div>
+
+        <section class="destinations-module">
+          <h2>Destination Results</h2>
+          <a class="explore button" href="../destinations/index.html">Explore</a>
+          <div class="container">
+            <!--
+            Displays up to 100 dynamycally generated restaurant cards.
+            Each one contains:
+            + Place Images
+            + Name
+            + 3 Type Tags
+            + Operational status
+            + 5-stars rating classification
+            + Price level
+            + Google maps/place site link (havent decided yet)
+            + "☆/★" favorite button (toggles favorite status)
+            -->
+          </div>
+        </section>
+        
+        <section class="restaurants-module">
+          <h2>Restaurant Results</h2>
+          <a class="explore button" href="../cuisine/index.html">Explore</a>
+          <div class="container">
+            <!--
+            Displays up to 100 dynamycally generated restaurant cards.
+            Each one contains:
+            + Restaurant logo
+            + Name
+            + 3 Type Tags
+            + Operational status
+            + 5-stars rating classification
+            + Price level
+            + Google maps/restaurant site link (havent decided yet)
+            + "☆/★" favorite button (toggles favorite status)
+            -->
+          </div>
+        </section>
+      </div>
+
+    </main>
+    
     <div id="dynamic-footer"></div>
   </body>
 </html>

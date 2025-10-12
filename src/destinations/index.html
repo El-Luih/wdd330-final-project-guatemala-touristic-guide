@@ -33,6 +33,94 @@
   </head>
   <body>
     <div id="dynamic-header"></div>
+    <main class="destinations-page">
+
+      <article class="hero">
+        <picture>
+          <source srcset="" media=""> 
+          <img src="" alt="A collage of some of the most beautifulplaces in Guatemala.">
+        </picture>
+        <h1 class="title">Discover Adventure
+          <span class="flavor">Embrace the legacy of the country's culture, revive its history, and enjoy its beauty.</span>
+        </h1>
+      </article>
+
+      <div class="grid">
+        <!--Grid for both the search module and the map-->
+        <div class="search-module">
+            <label for="searchbar">
+              <span class="field-name">Search</span>
+              <input id="searchbar" name="searchbar" type="text" placeholder="Search restaurants...">
+            </label>
+
+            <label for="regions">
+              <span class="field-name">Region</span>
+              <select name="regions" id="regions">
+                <!--
+                + Dynamically generated options, one for each region.
+                + Includes an "All Regions" option, selected by default.
+                -->
+              </select>
+            </label>
+
+            <label for="types">
+              <span class="field-name">Types</span>
+              <select name="types" id="types">
+                <!--
+                + Dynamically generated options, one for each place type.
+                + Includes an "All Types" option, selected by default.
+                -->
+              </select>
+            </label>
+
+            <fieldset class="status-filters">
+              <!--Operation status filters-->
+              <legend class="field-name">Status</legend>
+              <div class="grid radio">
+                <label for="all">
+                  <span>All</span>
+                  <input id="all" name="status" type="radio" value="all" checked>
+                </label>
+
+                <label for="open">
+                  <span>Open</span>
+                  <input id="open" name="status" type="radio" value="open">
+                </label>
+
+                <label for="closed">
+                  <span>Closed</span>
+                  <input id="closed" name="status" type="radio" value="closed">
+                </label>
+
+              </div>
+            </fieldset>
+
+            <div class="destinations container">
+            <!--
+            Displays up to 100 dynamycally generated destination cards.
+            Each one contains:
+            + Place Images
+            + Name
+            + 3 Type Tags
+            + Operational status
+            + 5-stars rating classification
+            + Price level
+            + Google maps/place site link (havent decided yet)
+            + "☆/★" favorite button (toggles favorite status)
+            -->
+          </div>
+        </div>
+
+        <div class="map">
+          <!--
+          + Embedded map using Google Maps API.
+          + Shows all the results according to the search module's current config.
+          + If a result is selected by its card in the resutls section or its marker in the map it will show only the place and center the map on it
+          + Styled to be black and white.
+          -->
+        </div>
+      </div>
+    </main>
     <div id="dynamic-footer"></div>
   </body>
 </html>

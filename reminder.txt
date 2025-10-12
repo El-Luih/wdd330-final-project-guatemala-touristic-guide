@@ -1,0 +1,21 @@
+- Configure the autocomplete extension for CSS files.
+- Use googlemaps API:
+
+Yes, you can customize a Google Maps iframe to be black and white! Here are your options:
+Option 1: Google Maps Embed API with Styling (Recommended)
+You can use the Google Maps JavaScript API with custom styling to make it grayscale:
+html<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+<script>
+function initMap() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 14.6349, lng: -90.5069 }, // Guatemala City
+    zoom: 8,
+    styles: [
+      {
+        stylers: [{ saturation: -100 }] // Makes it grayscale
+      }
+    ]
+  });
+}
+</script>
+<div id="map" style="width: 100%; height: 600px;"></div>
