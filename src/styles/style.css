@@ -1,0 +1,73 @@
+/* ========================
+	Layout & Utilities
+	(grouped by component for readability)
+	======================== */
+
+/* Aspect ratio helpers */
+.ratio-2x1 {
+  position: relative;
+  width: 100%;
+  padding-top: 50%;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+.ratio-2x1 img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.ratio-1x1 {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+.ratio-1x1 img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ========================
+	Result cards
+	.result-card { ... }
+	======================== */
+.result-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 8px;
+  background: #fff;
+}
+.result-card .card-body { padding: 8px; }
+.result-card .card-body h3 { margin: 0 0 6px 0; font-size: 1rem; }
+
+.card-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
+.tag { background:#eee; padding:4px 6px; border-radius:4px; font-size:0.8rem; }
+
+.card-status { font-size:0.85rem; color:#666; margin-bottom:8px; }
+.card-actions { display:flex; gap:8px; align-items:center; }
+
+.fav-button { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; }
+
+/* Small variant for main page where fewer details are shown */
+.small-card { padding:6px; display:flex; gap:8px; align-items:center; }
+
+/* ========================
+	Filters & Buttons
+	======================== */
+.filtering-buttons { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+.filter-button { border:1px solid #ccc; background:#fff; padding:6px 10px; border-radius:4px; cursor:pointer; }
+.filter-button.active { background:#1976d2; color:#fff; border-color:#1976d2; }
+
+/* ========================
+	Weather gadget
+	======================== */
+.gadget .weather { padding:8px; background:#fff; border-radius:6px; }
+.gadget .weather h2 { margin-top:0; }
+.gadget .weather div[id^="weather-"] { display:flex; align-items:center; gap:8px; margin:6px 0; }
+.gadget .weather img { display:block; }
+
+/* Ensure the map container has height so the map can render */
+.map { min-height: 360px; background: #eee; border-radius:6px; }
+
+/* small helpers */
+.card-media img { display:block; width:100%; height:100%; object-fit:cover; }
+
+

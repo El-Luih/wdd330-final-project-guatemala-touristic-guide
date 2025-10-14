@@ -29,8 +29,13 @@
     <link rel="stylesheet" href="styles/normalize.css" />
     <link rel="stylesheet" href="styles/style.css" />
     <link rel="icon" href="images/favicon.ico" />
-    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/destinations-CHBhqhUN.js"></script>
-    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-BPQblLgV.js">
+    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/destinations-DnPa18TY.js"></script>
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-DDZ2ozR1.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/PlaceDetails-CwexVQxr.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/RestaurantDetails-rBK7WBxa.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/photoRefQueue-D1gGZ7Iq.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/cardRenderer-Cn7qtTAr.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/RegionState-BV8WHhz9.js">
   </head>
   <body>
     <div id="dynamic-header"></div>
@@ -51,7 +56,7 @@
         <div class="search-module">
             <label for="searchbar">
               <span class="field-name">Search</span>
-              <input id="searchbar" name="searchbar" type="text" placeholder="Search restaurants...">
+              <input id="searchbar" name="searchbar" type="text" placeholder="Search locations...">
             </label>
 
             <label for="regions">
@@ -64,15 +69,6 @@
               </select>
             </label>
 
-            <label for="types">
-              <span class="field-name">Types</span>
-              <select name="types" id="types">
-                <!--
-                + Dynamically generated options, one for each place type.
-                + Includes an "All Types" option, selected by default.
-                -->
-              </select>
-            </label>
 
             <fieldset class="status-filters">
               <!--Operation status filters-->
@@ -104,8 +100,6 @@
             + Name
             + 3 Type Tags
             + Operational status
-            + 5-stars rating classification
-            + Price level
             + Google maps/place site link (havent decided yet)
             + "☆/★" favorite button (toggles favorite status)
             -->
