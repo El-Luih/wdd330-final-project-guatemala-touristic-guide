@@ -57,6 +57,9 @@ const PlacesAPI = (function () {
     'Las Verapaces': ['Las Verapaces', 'Verapaces Guatemala', 'restaurants in Las Verapaces'],
     Petén: ['Petén', 'Petén Guatemala', 'restaurants in Petén'],
     'South Coast': ['Pacific coast Guatemala', 'South Coast Guatemala', 'restaurants on the Pacific coast Guatemala'],
+    West: ['Quetzaltenango', 'Quetzaltenango restaurants', 'restaurants in Quetzaltenango'],
+    Southeast: ['Jutiapa', 'Jutiapa Guatemala restaurants', 'restaurants in Jutiapa'],
+    Northeast: ['Izabal', 'Izabal Guatemala restaurants', 'restaurants in Izabal'],
     // default fallbacks will be used for other regions
   };
 
@@ -108,7 +111,7 @@ const PlacesAPI = (function () {
       address: p.formatted_address || p.vicinity || null,
       photos,
       photoRefs,
-      region: loc ? assignRegionByLatLng(loc.lat, loc.lng) : 'Centre',
+      region: loc ? assignRegionByLatLng(loc.lat, loc.lng) : 'Center',
       raw: p,
     };
   }
@@ -307,10 +310,32 @@ const PlacesAPI = (function () {
     }
     // attempt initial region-specific seeds
     let items = await fetchManySeeds(seeds);
-    // if no items for this region, broaden the search to global seeds as a fallback
-    if ((!items || items.length === 0) && region && region !== 'All') {
+    // prefer items whose normalized region matches the requested region
+    if (region && region !== 'All') {
+      const exact = (items || []).filter(it => it.region === region);
+      if (exact && exact.length) {
+        const withFav = await includeFavorites(exact, 'restaurant');
+        return withFav.slice(0, limit);
+      }
+      // if no exact region matches, try a broader fallback
       const fallbackSeeds = ['best restaurants in Guatemala', 'popular restaurants Guatemala', `${region} near Guatemala City`];
-      items = await fetchManySeeds(fallbackSeeds);
+      const fallbackItems = await fetchManySeeds(fallbackSeeds);
+      const fallbackExact = (fallbackItems || []).filter(it => it.region === region);
+      if (fallbackExact && fallbackExact.length) {
+        const withFav = await includeFavorites(fallbackExact, 'restaurant');
+        return withFav.slice(0, limit);
+      }
+      // no region-exact matches; if we have any items at all, return them as broader nearby results
+      if (items && items.length) {
+        const withFav = await includeFavorites(items, 'restaurant');
+        return withFav.slice(0, limit);
+      }
+      if (fallbackItems && fallbackItems.length) {
+        const withFav = await includeFavorites(fallbackItems, 'restaurant');
+        return withFav.slice(0, limit);
+      }
+      // ultimately fall through to returning an empty list
+      return [];
     }
     const withFav = await includeFavorites(items, 'restaurant');
     return withFav.slice(0, limit);
@@ -319,7 +344,7 @@ const PlacesAPI = (function () {
   function groupByRegion(list) {
     const map = {};
     for (const item of list) {
-      const r = item.region || 'Centre';
+      const r = item.region || 'Center';
       if (!map[r]) map[r] = [];
       map[r].push(item);
     }

@@ -14,6 +14,8 @@ const DEFAULTS = {
 // in a single browsing session (helps in incognito/cold-start scenarios).
 const SESSION_BUDGET_KEY = '__photoRefSessionBudget_v1';
 const DEFAULT_SESSION_BUDGET = 20; // allow 20 photo blob fetches per session by default
+// Per-page automatic enqueue limit: how many images the page may auto-fetch
+const DEFAULT_SESSION_AUTO_LIMIT = 6; // default automatic loads per page
 
 function loadSessionBudget() {
   try {
@@ -185,7 +187,18 @@ export async function tryEnqueuePhotoRef(img, photoRef, opts = {}) {
       // fall through to budget check and enqueue
     }
     // Not cached: attempt to consume budget now
-    if (!consumeSessionBudget()) return false;
+    // Enforce per-page auto enqueue limit to avoid bulk auto-fetches from a single page
+    try {
+      const limit = parseInt(sessionStorage.getItem('__photoRefAutoLimit_v1'), 10) || DEFAULT_SESSION_AUTO_LIMIT;
+      const usedKey = '__photoRefAutoUsed_v1';
+      const used = parseInt(sessionStorage.getItem(usedKey), 10) || 0;
+      if (used >= limit) return false;
+      // attempt to consume session budget; if successful, increment used counter
+      if (!consumeSessionBudget()) return false;
+      sessionStorage.setItem(usedKey, String(used + 1));
+    } catch (e) {
+      if (!consumeSessionBudget()) return false;
+    }
     queue.push({ img, photoRef, retries: 0, opts });
     processQueue();
     return true;
