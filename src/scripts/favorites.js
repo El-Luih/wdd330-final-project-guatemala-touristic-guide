@@ -1,35 +1,13 @@
 import { loadHeaderFooter, loadFavorites, isFavorite, toggleFavorite, googleKey } from './util.mjs';
 import { addRegionToUrlString } from './RegionState.mjs';
 import PlacesAPI from './PlacesAPI.mjs';
-import { attractionCard } from './PlaceDetails.mjs';
-import { restaurantCard } from './RestaurantDetails.mjs';
+import { createAttractionCard, createRestaurantCard, ensureImageObserver } from './cardRenderer.mjs';
 
 let favDestinations = [];
 let favRestaurants = [];
 const PAGE_SIZE = 6;
 let favPage = 0;
-let imageObserver = null;
-function ensureImageObserver() {
-	if (imageObserver) return imageObserver;
-		imageObserver = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				if (!entry.isIntersecting) return;
-				const img = entry.target;
-				const src = img.dataset.src;
-				if (src) {
-					import('./util.mjs').then(mod => {
-						return mod.imageLoader.enqueue(img, src);
-					}).then(() => {
-						img.removeAttribute('data-src');
-					}).catch(() => {
-						img.removeAttribute('data-src');
-					});
-				}
-				imageObserver.unobserve(img);
-			});
-		}, { rootMargin: '200px 0px' });
-	return imageObserver;
-}
+// use shared ensureImageObserver from cardRenderer
 
 async function loadFavoriteDetails() {
 	const fav = loadFavorites();
@@ -80,58 +58,22 @@ function populateRegionSelect() {
 function renderFavorites() {
 	const destContainer = document.querySelector('.destinations-module .container');
 	const restContainer = document.querySelector('.restaurants-module .container');
+	const noFavMsg = document.querySelector('.no-favorites-message');
+	// remove any existing message
+	if (noFavMsg) noFavMsg.remove();
 	if (destContainer) {
 		destContainer.innerHTML = '';
 		favPage = 0;
-		const pageItems = favDestinations.slice(0, PAGE_SIZE);
-		// helper to create a full destination card element (used for initial render and pagination)
-		function createDestinationCard(p) {
-			const d = attractionCard(p);
-			const card = document.createElement('article'); card.className = 'result-card destination-card'; card.dataset.placeId = d.id;
-			const imgWrap = document.createElement('div'); imgWrap.className = 'card-media ratio-2x1';
-			const img = document.createElement('img');
-			img.dataset.src = d.image;
-			img.src = typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env.BASE_URL || '/') + 'images/placeholder-2x1.svg' : '/images/placeholder-2x1.svg';
-			img.alt = d.name;
-			img.onerror = async () => {
-				const base = (typeof import.meta !== 'undefined' && import.meta.env) ? (import.meta.env.BASE_URL || '/') : '/';
-				if (p && p.photos && p.photos.length) {
-					img.src = `${base}images/placeholder-2x1.svg`;
-					return;
-				}
-				const raw = p && p.raw ? p.raw : null;
-				const refs = p && p.photoRefs ? p.photoRefs : (raw && raw.photos ? raw.photos.map(ph => ph.photo_reference).filter(Boolean) : []);
-				if (refs && refs.length && googleKey) {
-					const ref = refs[0];
-					// set placeholder immediately, then enqueue serialized fetch which will
-					// replace the src when the blob is available (and cache it)
-					img.src = `${base}images/placeholder-2x1.svg`;
-					try {
-						const mod = await import('./photoRefQueue.mjs');
-						const enqueue = mod.enqueuePhotoRef || (mod.default && mod.default.enqueuePhotoRef);
-						if (typeof enqueue === 'function') {
-							enqueue(img, ref, { googleKey });
-							return;
-						}
-					} catch (e) {
-						console.warn('Failed to enqueue photoRef', e);
-					}
-				}
-				img.src = `${base}images/placeholder-2x1.svg`;
-			};
-			imgWrap.appendChild(img); card.appendChild(imgWrap);
-			ensureImageObserver().observe(img);
-			const body = document.createElement('div'); body.className = 'card-body'; const h3 = document.createElement('h3'); h3.textContent = d.name; body.appendChild(h3);
-			const favBtn = document.createElement('button'); favBtn.type = 'button'; favBtn.className = 'fav-button'; favBtn.textContent = isFavorite(d.id, 'destination') ? '★' : '☆';
-			favBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); toggleFavorite(d.id, 'destination'); favBtn.textContent = isFavorite(d.id, 'destination') ? '★' : '☆'; renderFavorites(); });
-			body.appendChild(favBtn); card.appendChild(body);
-			return card;
+		if (!favDestinations || favDestinations.length === 0) {
+			const m = document.createElement('div'); m.className = 'no-favorites-message'; m.textContent = 'No favorites saved';
+			destContainer.appendChild(m);
+		} else {
+			const pageItems = favDestinations.slice(0, PAGE_SIZE);
+			pageItems.forEach(p => {
+				const card = createAttractionCard(p, { onFiltersReapply: renderFavorites });
+				destContainer.appendChild(card);
+			});
 		}
-
-		pageItems.forEach(p => {
-			const card = createDestinationCard(p);
-			destContainer.appendChild(card);
-		});
 		if (favDestinations.length > PAGE_SIZE) {
 			let btn = document.querySelector('#show-more-fav-dest');
 			if (!btn) {
@@ -141,9 +83,9 @@ function renderFavorites() {
 					const s = favPage * PAGE_SIZE; const e = Math.min(favDestinations.length, (favPage + 1) * PAGE_SIZE);
 					const next = favDestinations.slice(s, e);
 					next.forEach(p => {
-							const card = createDestinationCard(p);
-							destContainer.appendChild(card);
-						});
+						const card = createAttractionCard(p, { onFiltersReapply: renderFavorites });
+						destContainer.appendChild(card);
+					});
 					if ((favPage + 1) * PAGE_SIZE >= favDestinations.length) btn.remove();
 				});
 				destContainer.parentElement.appendChild(btn);
@@ -153,27 +95,16 @@ function renderFavorites() {
 	if (restContainer) {
 		restContainer.innerHTML = '';
 		favPage = 0;
-		const pageItems = favRestaurants.slice(0, PAGE_SIZE);
-		// restaurant card helper
-		function createRestaurantCard(p) {
-			const d = restaurantCard(p);
-			const card = document.createElement('article'); card.className = 'result-card restaurant-card'; card.dataset.placeId = d.id;
-			const imgWrap = document.createElement('div'); imgWrap.className = 'card-media ratio-1x1';
-			const img = document.createElement('img'); img.dataset.src = d.logo; img.src = typeof import.meta !== 'undefined' && import.meta.env ? (import.meta.env.BASE_URL || '/') + 'images/restaurant-placeholder-1x1.svg' : '/images/restaurant-placeholder-1x1.svg'; img.alt = d.name;
-			img.onerror = () => { const base = (typeof import.meta !== 'undefined' && import.meta.env) ? (import.meta.env.BASE_URL || '/') : '/'; img.src = `${base}images/restaurant-placeholder-1x1.svg`; };
-			imgWrap.appendChild(img); card.appendChild(imgWrap);
-			const body = document.createElement('div'); body.className = 'card-body'; const h3 = document.createElement('h3'); h3.textContent = d.name; body.appendChild(h3);
-			const favBtn = document.createElement('button'); favBtn.type = 'button'; favBtn.className = 'fav-button'; favBtn.textContent = isFavorite(d.id, 'restaurant') ? '★' : '☆';
-			favBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); toggleFavorite(d.id, 'restaurant'); favBtn.textContent = isFavorite(d.id, 'restaurant') ? '★' : '☆'; renderFavorites(); });
-			body.appendChild(favBtn); card.appendChild(body);
-			ensureImageObserver().observe(img);
-			return card;
+		if (!favRestaurants || favRestaurants.length === 0) {
+			const m = document.createElement('div'); m.className = 'no-favorites-message'; m.textContent = 'No favorites saved';
+			restContainer.appendChild(m);
+		} else {
+			const pageItems = favRestaurants.slice(0, PAGE_SIZE);
+			pageItems.forEach(p => {
+				const card = createRestaurantCard(p, { onFiltersReapply: renderFavorites });
+				restContainer.appendChild(card);
+			});
 		}
-
-		pageItems.forEach(p => {
-			const card = createRestaurantCard(p);
-			restContainer.appendChild(card);
-		});
 		if (favRestaurants.length > PAGE_SIZE) {
 			let btn = document.querySelector('#show-more-fav-rest');
 			if (!btn) {
@@ -183,7 +114,7 @@ function renderFavorites() {
 					const s = favPage * PAGE_SIZE; const e = Math.min(favRestaurants.length, (favPage + 1) * PAGE_SIZE);
 					const next = favRestaurants.slice(s, e);
 					next.forEach(p => {
-						const card = createRestaurantCard(p);
+						const card = createRestaurantCard(p, { onFiltersReapply: renderFavorites });
 						restContainer.appendChild(card);
 					});
 					if ((favPage + 1) * PAGE_SIZE >= favRestaurants.length) btn.remove();
