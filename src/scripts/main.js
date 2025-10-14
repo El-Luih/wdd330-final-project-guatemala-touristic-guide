@@ -1,10 +1,11 @@
-import { loadHeaderFooter } from './util.mjs';
+import { loadHeaderFooter, isFavorite, toggleFavorite } from './util.mjs';
 import OpenMeteoAPI from './OpenMeteoAPI.mjs';
 import { dailySummary, WEATHER_ICONS } from './WeatherDetails.mjs';
 import { REGION_VIEWS, DEFAULT_COUNTRY_VIEW } from './MapConfig.mjs';
-import { addRegionToUrlString, getActiveRegionFromUI } from './RegionState.mjs';
+import { addRegionToUrlString, getActiveRegionFromUI, getRegionFromQuery, applyRegionToUI } from './RegionState.mjs';
 import PlacesAPI from './PlacesAPI.mjs';
 import { attractionCard } from './PlaceDetails.mjs';
+import { restaurantCard } from './RestaurantDetails.mjs';
 
 // Main page: weather gadget wiring.
 // Behavior:
@@ -55,15 +56,44 @@ function regionToCoords(region) {
 function setupMainRegionButtons() {
 	const filterContainer = document.querySelector('.filtering-buttons');
 	if (!filterContainer) return;
+	// build region buttons (All + regions from REGION_VIEWS)
+	filterContainer.innerHTML = '';
+	const allBtn = document.createElement('button');
+	allBtn.dataset.region = 'All';
+	allBtn.textContent = 'All';
+	filterContainer.appendChild(allBtn);
+	Object.keys(REGION_VIEWS).forEach(r => {
+		const b = document.createElement('button');
+		b.dataset.region = r;
+		b.textContent = r;
+		filterContainer.appendChild(b);
+	});
+
+	// set current based on URL query (if any)
+	let activeRegion = 'All';
+	try { const q = getRegionFromQuery(); if (q) activeRegion = q; } catch (e) {}
+	applyRegionToUI(activeRegion);
+
 	filterContainer.addEventListener('click', (e) => {
 		const btn = e.target.closest('button');
 		if (!btn) return;
-		document.querySelectorAll('.filtering-buttons button').forEach(b => b.classList.remove('active'));
-		btn.classList.add('active');
 		const region = btn.dataset.region || 'All';
-		const coords = regionToCoords(region);
-		showWeatherFor(coords.lat, coords.lng, region === 'All' ? 'Guatemala' : region);
+		// navigate to same page with region param so the page will reload and fetch region-scoped gadgets
+		try {
+			const newUrl = addRegionToUrlString(location.href, region);
+			location.href = newUrl;
+		} catch (err) {
+			// fallback: apply UI and update weather without reloading
+			document.querySelectorAll('.filtering-buttons button').forEach(b => b.classList.toggle('current', b.dataset.region === region));
+			const coords = regionToCoords(region);
+			showWeatherFor(coords.lat, coords.lng, region === 'All' ? 'Guatemala' : region);
+		}
 	});
+}
+
+// Helper to mark active button (used when DOM loaded and after navigation)
+function markCurrentRegion(region) {
+  try { document.querySelectorAll('.filtering-buttons button').forEach(b => b.classList.toggle('current', b.dataset.region === (region || 'All'))); } catch (e) {}
 }
 
 // Add click handlers to Explore buttons so they pass the currently selected region
@@ -85,10 +115,64 @@ function wireExploreButtons() {
 document.addEventListener('DOMContentLoaded', () => {
 	loadHeaderFooter();
 	setupMainRegionButtons();
+	// ensure current button is highlighted according to query
+	let incoming = 'All'; try { const r = getRegionFromQuery(); if (r) incoming = r; } catch (e) {}
+	markCurrentRegion(incoming);
 	wireExploreButtons();
 	// show default country weather
-	const c = DEFAULT_COUNTRY_VIEW.center;
-	showWeatherFor(c.lat, c.lng, 'Guatemala');
+	const c = regionToCoords(incoming);
+	showWeatherFor(c.lat, c.lng, incoming === 'All' ? 'Guatemala' : incoming);
+
+	// render featured destinations (first N attractions that have photos)
+	// and featured restaurants — both region-scoped to incoming region, 6 each
+	(async () => {
+		try {
+			const region = incoming || 'All';
+			// fetch up to 6 attractions and restaurants for this region
+			const [at, rs] = await Promise.all([
+				PlacesAPI.fetchAttractionsForRegion(region, 6),
+				PlacesAPI.fetchRestaurantsForRegion(region, 6),
+			]);
+			// render attractions
+			const destContainer = document.querySelector('.destinations.container');
+			if (destContainer) {
+				destContainer.innerHTML = '';
+				(at || []).slice(0,6).forEach(p => {
+					const d = attractionCard(p);
+					const card = document.createElement('article'); card.className = 'small-card';
+					const imgWrap = document.createElement('div'); imgWrap.className = 'card-media ratio-2x1';
+					const img = document.createElement('img'); img.src = d.image; img.alt = d.name;
+					img.onerror = () => { const base = import.meta.env.BASE_URL || '/'; img.src = `${base}images/placeholder-2x1.svg`; };
+					imgWrap.appendChild(img); card.appendChild(imgWrap);
+					const h = document.createElement('h4'); h.textContent = d.name; card.appendChild(h);
+					const favBtn = document.createElement('button'); favBtn.type = 'button'; favBtn.className = 'fav-button'; favBtn.textContent = isFavorite(d.id, 'destination') ? '★' : '☆';
+					favBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); toggleFavorite(d.id, 'destination'); favBtn.textContent = isFavorite(d.id, 'destination') ? '★' : '☆'; });
+					card.appendChild(favBtn);
+					destContainer.appendChild(card);
+				});
+			}
+			// render restaurants
+			const restContainer = document.querySelector('.restaurants.container');
+			if (restContainer) {
+				restContainer.innerHTML = '';
+				(rs || []).slice(0,6).forEach(p => {
+					const r = restaurantCard(p);
+					const card = document.createElement('article'); card.className = 'small-card';
+					const imgWrap = document.createElement('div'); imgWrap.className = 'card-media ratio-1x1';
+					const img = document.createElement('img'); img.src = r.logo; img.alt = r.name;
+					img.onerror = () => { const base = import.meta.env.BASE_URL || '/'; img.src = `${base}images/restaurant-placeholder-1x1.svg`; };
+					imgWrap.appendChild(img); card.appendChild(imgWrap);
+					const h = document.createElement('h4'); h.textContent = r.name; card.appendChild(h);
+					const favBtn = document.createElement('button'); favBtn.type = 'button'; favBtn.className = 'fav-button'; favBtn.textContent = isFavorite(r.id, 'restaurant') ? '★' : '☆';
+					favBtn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); toggleFavorite(r.id, 'restaurant'); favBtn.textContent = isFavorite(r.id, 'restaurant') ? '★' : '☆'; });
+					card.appendChild(favBtn);
+					restContainer.appendChild(card);
+				});
+			}
+		} catch (e) {
+			console.warn('Failed rendering main page gadgets', e);
+		}
+	})();
 	// render featured destinations (first N attractions that have photos)
 	(async () => {
 		try {
