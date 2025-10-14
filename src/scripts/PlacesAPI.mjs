@@ -49,6 +49,17 @@ const PlacesAPI = (function () {
     { placeId: 'sample-3', name: 'Lake Atitlán', types: ['natural_feature'], status: 'OPERATIONAL', location: { lat: 14.704, lng: -91.186 }, address: 'Lake Atitlán', photos: [], region: 'West', raw: {} },
   ];
 
+  // Map internal region names to user-friendly search phrases that yield better
+  // Places textSearch results. Some region tokens (like 'Metropolitan') don't
+  // work well as stand-alone search queries, so provide sensible fallbacks.
+  const REGION_QUERY_MAP = {
+    Metropolitan: ['Guatemala City', 'Guatemala City restaurants', 'restaurants in Guatemala City'],
+    'Las Verapaces': ['Las Verapaces', 'Verapaces Guatemala', 'restaurants in Las Verapaces'],
+    Petén: ['Petén', 'Petén Guatemala', 'restaurants in Petén'],
+    'South Coast': ['Pacific coast Guatemala', 'South Coast Guatemala', 'restaurants on the Pacific coast Guatemala'],
+    // default fallbacks will be used for other regions
+  };
+
   async function ensure() {
     try {
       await GoogleMapsAPI.load();
@@ -282,15 +293,25 @@ const PlacesAPI = (function () {
   async function fetchRestaurantsForRegion(region = 'All', limit = 18) {
     await ensure();
     if ((region === 'All' || !region) && restaurants.length) return includeFavorites(restaurants.slice(0, limit), 'restaurant');
-    const seeds = [];
+    let seeds = [];
     if (region && region !== 'All') {
-      seeds.push(`${region} restaurants`);
-      seeds.push(`best restaurants in ${region}`);
-      seeds.push(`${region} local cuisine`);
+      // use improved region->query mappings when available
+      if (REGION_QUERY_MAP[region]) seeds = REGION_QUERY_MAP[region].slice();
+      else {
+        seeds.push(`${region} restaurants`);
+        seeds.push(`best restaurants in ${region}`);
+        seeds.push(`${region} local cuisine`);
+      }
     } else {
       seeds.push('best restaurants in Guatemala');
     }
-    const items = await fetchManySeeds(seeds);
+    // attempt initial region-specific seeds
+    let items = await fetchManySeeds(seeds);
+    // if no items for this region, broaden the search to global seeds as a fallback
+    if ((!items || items.length === 0) && region && region !== 'All') {
+      const fallbackSeeds = ['best restaurants in Guatemala', 'popular restaurants Guatemala', `${region} near Guatemala City`];
+      items = await fetchManySeeds(fallbackSeeds);
+    }
     const withFav = await includeFavorites(items, 'restaurant');
     return withFav.slice(0, limit);
   }

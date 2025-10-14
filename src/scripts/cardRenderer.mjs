@@ -126,8 +126,8 @@ function humanizeTag(raw) {
 }
 export function ensureImageObserver() {
   if (_imageObserver) return _imageObserver;
-  _imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+  _imageObserver = new IntersectionObserver(async (entries) => {
+    entries.forEach(async entry => {
       if (!entry.isIntersecting) return;
       const img = entry.target;
       const src = img.dataset.src;
@@ -144,11 +144,16 @@ export function ensureImageObserver() {
               const pr = u.searchParams.get('photoreference') || u.searchParams.get('photo_reference');
               if (pr) {
                 try {
-                  const accepted = photoRefQueue.enqueuePhotoRef(img, pr, { googleKey });
-                  if (!accepted) {
-                    // session budget exhausted: mark image as blocked and add click-to-load
-                    try { img.dataset.photoRefBlocked = '1'; } catch (e) {}
-                    try { addClickToLoad(img, pr); } catch (e) {}
+                  // use tryEnqueuePhotoRef to avoid consuming session budget for cached blobs
+                  try {
+                    const ok = await photoRefQueue.tryEnqueuePhotoRef(img, pr, { googleKey });
+                    if (!ok) {
+                      try { img.dataset.photoRefBlocked = '1'; } catch (e) {}
+                      try { addClickToLoad(img, pr); } catch (e) {}
+                    }
+                  } catch (e) {
+                    // If tryEnqueuePhotoRef fails unexpectedly, fall back to enqueue
+                    photoRefQueue.enqueuePhotoRef(img, pr, { googleKey });
                   }
                 } catch (e) {
                   try { imageLoader.enqueue(img, src).then(() => { try { img.removeAttribute('data-src'); } catch (e) {} }).catch(() => { try { img.removeAttribute('data-src'); } catch (e) {} }); } catch (e2) {}
@@ -181,26 +186,24 @@ function addClickToLoad(img, photoRef) {
     // simple visual affordance: show title and cursor
     img.title = 'Image blocked to avoid quota; click to load';
     img.style.cursor = 'pointer';
-    const handler = async (e) => {
+        const handler = async (e) => {
       e.preventDefault();
       e.stopPropagation();
       try {
         // attempt to import and enqueue again; the queue will consume budget
-        const mod = await import('./photoRefQueue.mjs');
-        const enqueue = mod.enqueuePhotoRef || (mod.default && mod.default.enqueuePhotoRef);
-        if (typeof enqueue === 'function') {
-          const ok = enqueue(img, photoRef, { googleKey });
-          if (ok) {
-            // remove affordance
-            try { img.removeAttribute('title'); } catch (e) {}
-            try { img.style.cursor = ''; } catch (e) {}
-            try { delete img.dataset.photoRefBlocked; } catch (e) {}
-            try { img.removeEventListener('click', handler); } catch (e) {}
-          } else {
-            // still blocked; update title
-            try { img.title = 'Still blocked — please try again later'; } catch (e) {}
-          }
-        }
+            const mod = await import('./photoRefQueue.mjs');
+            const tryEnqueue = mod.tryEnqueuePhotoRef || (mod.default && mod.default.tryEnqueuePhotoRef);
+            if (typeof tryEnqueue === 'function') {
+              const ok = await tryEnqueue(img, photoRef, { googleKey });
+              if (ok) {
+                try { img.removeAttribute('title'); } catch (e) {}
+                try { img.style.cursor = ''; } catch (e) {}
+                try { delete img.dataset.photoRefBlocked; } catch (e) {}
+                try { img.removeEventListener('click', handler); } catch (e) {}
+              } else {
+                try { img.title = 'Still blocked — please try again later'; } catch (e) {}
+              }
+            }
       } catch (e) {
         console.warn('click-to-load enqueue failed', e);
       }
@@ -365,9 +368,15 @@ export function createRestaurantCard(place, { mapHelpers = null, onFiltersReappl
   mapLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cardData.name)}&query_place_id=${encodeURIComponent(cardData.id)}`;
   mapLink.textContent = 'Open in Google Maps'; mapLink.target = '_blank';
   actions.appendChild(mapLink);
-  // Prevent navigation if button is inside an interactive element; ensure non-submitting behavior
-  favBtn.type = 'button';
-  favBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(cardData.id, 'restaurant'); favBtn.textContent = isFavorite(cardData.id, 'restaurant') ? '★' : '☆'; if (typeof onFiltersReapply === 'function') onFiltersReapply(); });
+  // Create favorite button, prevent navigation if button is inside an interactive element;
+  // ensure non-submitting behavior
+  const favBtn = document.createElement('button'); favBtn.type = 'button'; favBtn.className = 'fav-button'; favBtn.textContent = isFavorite(cardData.id, 'restaurant') ? '★' : '☆';
+  favBtn.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    toggleFavorite(cardData.id, 'restaurant');
+    favBtn.textContent = isFavorite(cardData.id, 'restaurant') ? '★' : '☆';
+    if (typeof onFiltersReapply === 'function') onFiltersReapply();
+  });
   actions.appendChild(favBtn);
   body.appendChild(actions);
   card.appendChild(body);

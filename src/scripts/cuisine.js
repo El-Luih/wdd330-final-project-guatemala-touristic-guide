@@ -3,6 +3,7 @@ import PlacesAPI from './PlacesAPI.mjs';
 import GoogleMapsAPI from './GoogleMapsAPI.mjs';
 import { createRestaurantCard, ensureImageObserver } from './cardRenderer.mjs';
 import { REGION_VIEWS, DEFAULT_COUNTRY_VIEW } from './MapConfig.mjs';
+import { addRegionToUrlString, getRegionFromQuery, applyRegionToUI } from './RegionState.mjs';
 
 let allRestaurants = [];
 let currentResults = [];
@@ -52,18 +53,37 @@ async function initCuisine() {
 	let mapsLoaded = true;
 	try { await GoogleMapsAPI.load(); } catch (e) { console.warn('Maps load failed', e); mapsLoaded = false; }
 
+	// Determine incoming region from the URL (if present) and apply to the UI
+	let incomingRegion = 'All';
+	try {
+		const r = getRegionFromQuery();
+		if (r) incomingRegion = r;
+	} catch (e) {}
+	try { applyRegionToUI(incomingRegion); } catch (e) {}
+
 	// Cold-session mitigation: if a specific region is requested on first load,
 	// set a conservative session budget to avoid bulk photo fetches in incognito.
 	try {
-		const incomingRegion = (function(){ try { const p = new URLSearchParams(location.search); return p.get('region'); } catch (e) { return null; } })();
 		const BUDGET_KEY = '__photoRefSessionBudget_v1';
 		if (incomingRegion && incomingRegion !== 'All' && !sessionStorage.getItem(BUDGET_KEY)) {
 			sessionStorage.setItem(BUDGET_KEY, String(6));
 		}
 	} catch (e) {}
 
-	// initial load: fetch global (All) up to 18
-	allRestaurants = await PlacesAPI.fetchRestaurantsForRegion('All', 18);
+	// initial load: fetch region-scoped restaurants up to the page cap
+	allRestaurants = await PlacesAPI.fetchRestaurantsForRegion(incomingRegion || 'All', 18);
+	// If a region-specific fetch returns empty, try falling back to a global list
+	if ((!allRestaurants || allRestaurants.length === 0) && incomingRegion && incomingRegion !== 'All') {
+		console.debug('Cuisine: region fetch empty for', incomingRegion, ' — falling back to global fetch');
+		const global = await PlacesAPI.fetchRestaurantsForRegion('All', 18);
+		if (global && global.length) allRestaurants = global;
+	}
+	// diagnostic: log distribution by region
+	try {
+		const map = {};
+		(allRestaurants || []).forEach(r => { const k = r.region || 'Unknown'; map[k] = (map[k] || 0) + 1; });
+		console.debug('Cuisine: fetched restaurants count', (allRestaurants || []).length, 'by region', map);
+	} catch (e) {}
 
 	if (mapsLoaded) {
 		try { initMap(); } catch (e) { console.warn('initMap failed', e); mapsLoaded = false; }
