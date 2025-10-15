@@ -70,4 +70,26 @@
 /* small helpers */
 .card-media img { display:block; width:100%; height:100%; object-fit:cover; }
 
+/* Main page mini event cards */
+.mini-event-card {
+  display:flex;
+  align-items:center;
+  padding:8px 12px;
+  margin:6px 0;
+  background:#fff;
+  border-radius:4px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.03) inset;
+}
+.mini-event__left { padding-left:12px; }
+.mini-event__name { font-weight:600; font-size:0.95rem; }
+.mini-event__date { color:#666; font-size:0.85rem; }
+
+/* thick left border indicating status */
+.mini-event-card.mini-event--past { border-left: 8px solid #d32f2f; }
+.mini-event-card.mini-event--upcoming { border-left: 8px solid #9e9e9e; }
+.mini-event-card.mini-event--ongoing { border-left: 8px solid #388e3c; }
+
+/* empty state for events gadget */
+.no-events { padding: 12px; color: #666; font-style: italic; }
+
 

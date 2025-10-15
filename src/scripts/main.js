@@ -31,9 +31,11 @@ async function showWeatherFor(lat, lon, regionName = 'Guatemala') {
 			const pDay = document.createElement('h4'); pDay.textContent = dayName;
 			const img = document.createElement('img');
 			const iconFile = WEATHER_ICONS[d.code] || 'clear.svg';
-			img.src = `/images/weather/${iconFile}`;
+			const baseImg = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/';
+			img.src = `${baseImg}images/weather/${iconFile}`;
 			img.alt = 'weather';
 			img.width = 48; img.height = 48;
+			img.onerror = () => { img.src = `${baseImg}images/weather/clear.svg`; };
 			const temp = document.createElement('div'); temp.textContent = formatTemp(d.max);
 			el.appendChild(pDay);
 			el.appendChild(img);
@@ -198,4 +200,143 @@ document.addEventListener('DOMContentLoaded', () => {
 			console.warn('Failed rendering featured destinations', e);
 		}
 	})();
+
+});
+
+// --- Events gadget for main page -------------------------------------------------
+function parseMonthDay(md) {
+	if (!md) return null;
+	const parts = md.split('-').map(s => s.padStart(2, '0'));
+	if (parts.length !== 2) return null;
+	return { mm: parseInt(parts[0], 10), dd: parseInt(parts[1], 10) };
+}
+
+function statusForEvent(startDate, endDate, today = new Date()) {
+	const s = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+	const e = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+	const t = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+	if (t < s) return 'upcoming';
+	if (t > e) return 'past';
+	return 'ongoing';
+}
+
+async function renderMainEventsGadget() {
+	const container = document.querySelector('.events.container.table');
+	if (!container) return;
+	// fetch JSON (try relative/site paths)
+			const base = import.meta && import.meta.env && import.meta.env.BASE_URL ? import.meta.env.BASE_URL : '/';
+			const candidates = [
+				`${base}json/guatemala-events.json`, // prefer Vite base URL
+				'json/guatemala-events.json', // relative from site root
+				'/json/guatemala-events.json', // absolute site root
+				'/public/json/guatemala-events.json',
+				'/src/public/json/guatemala-events.json',
+				'../json/guatemala-events.json', // in case page is nested (e.g. /events/index.html)
+				'./public/json/guatemala-events.json'
+			];
+			try { console.debug('Events JSON fetch candidates:', candidates); } catch (e) {}
+		let data = null;
+		const attempts = [];
+		for (const p of candidates) {
+			try {
+				const res = await fetch(p);
+				attempts.push({ path: p, ok: res.ok, status: res.status });
+				if (!res.ok) continue;
+				data = await res.json();
+				break;
+			} catch (e) {
+				attempts.push({ path: p, ok: false, error: String(e) });
+			}
+		}
+			if (!data) {
+				// Render diagnostic info into the container (visible without DevTools)
+				container.innerHTML = '';
+				const msg = document.createElement('div');
+				msg.className = 'no-events';
+				msg.textContent = 'No events this month';
+				container.appendChild(msg);
+
+				const diag = document.createElement('details');
+				diag.style.marginTop = '10px';
+				const summary = document.createElement('summary');
+				summary.textContent = 'Debug: attempted event JSON paths (click to expand)';
+				diag.appendChild(summary);
+				const list = document.createElement('ul');
+				attempts.forEach(a => {
+					const li = document.createElement('li');
+					if (a.error) li.textContent = `${a.path} → error: ${a.error}`;
+					else li.textContent = `${a.path} → ok: ${a.ok} ${a.status ? `(HTTP ${a.status})` : ''}`;
+					list.appendChild(li);
+				});
+				diag.appendChild(list);
+				container.appendChild(diag);
+
+				try { console.warn('Events JSON fetch failed; attempted paths:', attempts); } catch (e) {}
+				return;
+			}
+
+	const now = new Date();
+	const currentMonth = now.getMonth(); // 0-11
+
+	// normalize events: compute startDate, endDate, status
+	const events = data.map(raw => {
+		const startMD = parseMonthDay(raw.date && raw.date.start);
+		const endMD = parseMonthDay(raw.date && raw.date.end) || startMD;
+		const startDate = new Date(now.getFullYear(), startMD.mm - 1, startMD.dd);
+		let endDate = new Date(now.getFullYear(), endMD.mm - 1, endMD.dd);
+		if (endDate < startDate) endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+		const status = statusForEvent(startDate, endDate, now);
+		return { raw, startDate, endDate, status };
+	}).filter(e => e.startDate.getMonth() === currentMonth);
+
+	// sort by date ascending, then by status: ongoing (0), upcoming (1), past (2)
+	const statusRank = { ongoing: 0, upcoming: 1, past: 2 };
+	events.sort((a, b) => {
+		if (a.startDate - b.startDate !== 0) return a.startDate - b.startDate;
+		return statusRank[a.status] - statusRank[b.status];
+	});
+
+		// render small cards
+		container.innerHTML = '';
+		if (!events || events.length === 0) {
+			const msg = document.createElement('div');
+			msg.className = 'no-events';
+			msg.textContent = 'No events this month';
+			container.appendChild(msg);
+			return;
+		}
+
+		events.forEach(e => {
+		const art = document.createElement('article');
+		art.className = 'mini-event-card';
+		// thick left border color via class
+		art.classList.add(`mini-event--${e.status}`);
+
+		const left = document.createElement('div'); left.className = 'mini-event__left';
+		const name = document.createElement('div'); name.className = 'mini-event__name'; name.textContent = e.raw.name;
+		const date = document.createElement('div'); date.className = 'mini-event__date';
+		const sd = e.startDate; date.textContent = sd.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+		left.appendChild(name);
+		left.appendChild(date);
+		art.appendChild(left);
+		container.appendChild(art);
+	});
+}
+
+// render events gadget on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+	try {
+		renderMainEventsGadget();
+	} catch (err) {
+		console.error('renderMainEventsGadget failed:', err);
+		const container = document.querySelector('.events.container.table');
+		if (container) {
+			container.innerHTML = '';
+			const msg = document.createElement('div');
+			msg.className = 'no-events';
+			msg.textContent = 'Events could not be loaded (see console for details)';
+			container.appendChild(msg);
+		}
+	}
 });
