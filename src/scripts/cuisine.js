@@ -12,6 +12,7 @@ const PAGE_SIZE = 6;
 let currentPage = 0;
 const MAX_SHOW_MORE_CLICKS = 3;
 let showMoreClicks = 0;
+let initialFetchRegion = 'All';
 // use shared ensureImageObserver and shared card renderer
 
 async function initCuisine() {
@@ -70,8 +71,18 @@ async function initCuisine() {
 		}
 	} catch (e) {}
 
+	// For the cuisine page be extra conservative: limit how many images the page
+	// will auto-fetch. Remaining images will show the click-to-load affordance.
+	try {
+		// set to 3 auto loads for cuisine pages
+		sessionStorage.setItem('__photoRefAutoLimit_v1', String(3));
+		// reset used counter for this page load
+		sessionStorage.setItem('__photoRefAutoUsed_v1', String(0));
+	} catch (e) {}
+
 	// initial load: fetch region-scoped restaurants up to the page cap
-	allRestaurants = await PlacesAPI.fetchRestaurantsForRegion(incomingRegion || 'All', 18);
+	initialFetchRegion = incomingRegion || 'All';
+	allRestaurants = await PlacesAPI.fetchRestaurantsForRegion(initialFetchRegion, 18);
 	// If a region-specific fetch returns empty, try falling back to a global list
 	if ((!allRestaurants || allRestaurants.length === 0) && incomingRegion && incomingRegion !== 'All') {
 		console.debug('Cuisine: region fetch empty for', incomingRegion, ' — falling back to global fetch');
@@ -127,7 +138,14 @@ function applyFilters() {
 	const status = document.querySelector('input[name="status"]:checked')?.value || 'all';
 	const region = document.querySelector('#regions')?.value || 'All';
 	let list = [...allRestaurants];
-	if (region && region !== 'All') list = list.filter(p => p.region === region);
+	// If the list was fetched for a specific region (initialFetchRegion), that
+	// list may include broader/nearby results whose normalized `region` doesn't
+	// exactly match the selected region. In that case, don't filter by item
+	// region when the selected region equals the initial fetch region; allow
+	// the fetched results to be shown. Only apply per-item region filtering
+	// when the user explicitly selects a different region than the one used
+	// to fetch `allRestaurants`.
+	if (region && region !== 'All' && region !== initialFetchRegion) list = list.filter(p => p.region === region);
 	if (status && status !== 'all') {
 	if (status === 'open') list = list.filter(p => (typeof p.isOpen === 'boolean') ? p.isOpen : (p.status || '').toLowerCase().includes('operational'));
 		if (status === 'closed') list = list.filter(p => (p.status || '').toLowerCase().includes('closed'));

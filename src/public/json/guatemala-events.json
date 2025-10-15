@@ -3,8 +3,8 @@
     "name": "Semana Santa (Holy Week)",
     "description": "Guatemala's most important religious celebration featuring elaborate alfombras (carpets) made of colored sawdust, flowers, and fruits. Antigua Guatemala hosts the most spectacular processions with massive floats carried through streets adorned with intricate designs. This UNESCO-recognized tradition attracts thousands of visitors annually.",
     "date": {
-      "start": "2025-04-13",
-      "end": "2025-04-20",
+      "start": "04-13",
+      "end": "04-20",
       "special": null
     },
     "image": "semana-santa-antigua.webp"
@@ -13,8 +13,8 @@
     "name": "Día de los Muertos (Day of the Dead)",
     "description": "Guatemalans honor deceased loved ones with colorful traditions including the famous Giant Kite Festival in Santiago Sacatepéquez and Sumpango. Families visit cemeteries, clean graves, and share traditional foods like fiambre. The giant kites symbolize communication between the living and the dead.",
     "date": {
-      "start": "2025-11-01",
-      "end": "2025-11-02",
+      "start": "11-01",
+      "end": "11-02",
       "special": null
     },
     "image": "dia-de-los-muertos-kites.webp"
@@ -23,8 +23,8 @@
     "name": "Independence Day",
     "description": "Guatemala celebrates independence from Spain with parades, traditional dances, and the Torch Relay that travels from Guatemala City to other Central American countries. Schools participate in marching bands, students wear traditional trajes, and streets fill with blue and white decorations representing the national flag.",
     "date": {
-      "start": "2025-09-15",
-      "end": "2025-09-15",
+      "start": "09-15",
+      "end": "09-15",
       "special": null
     },
     "image": "independence-day-parade.webp"
@@ -33,8 +33,8 @@
     "name": "Quema del Diablo (Burning of the Devil)",
     "description": "On December 7th at 6 PM, Guatemalans burn devil effigies and old belongings in bonfires to symbolically cleanse homes and communities of evil before Christmas. This unique tradition fills streets with smoke and fire as families gather to participate in this pre-holiday ritual.",
     "date": {
-      "start": "2025-12-07",
-      "end": "2025-12-07",
+      "start": "12-07",
+      "end": "12-07",
       "special": null
     },
     "image": "quema-del-diablo.webp"
@@ -43,8 +43,8 @@
     "name": "Festival de Barriletes Gigantes (Giant Kite Festival)",
     "description": "Held annually in Santiago Sacatepéquez and Sumpango, this spectacular event features massive handmade kites up to 45 feet in diameter. Communities spend months creating these colorful masterpieces with intricate designs and messages. The kites represent the connection between earth and heaven.",
     "date": {
-      "start": "2025-11-01",
-      "end": "2025-11-01",
+      "start": "11-01",
+      "end": "11-01",
       "special": null
     },
     "image": "barriletes-gigantes.webp"
@@ -53,8 +53,8 @@
     "name": "Feria de Jocotenango",
     "description": "This traditional fair in Jocotenango near Antigua features livestock exhibitions, agricultural displays, traditional food vendors, and carnival rides. Local artisans showcase handicrafts while musicians perform marimba music. The fair celebrates rural Guatemalan culture and agricultural heritage with rodeos and folkloric dances.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "08-01",
+      "end": "08-07",
       "special": "First week of August"
     },
     "image": "feria-jocotenango.webp"
@@ -63,8 +63,8 @@
     "name": "Livingston's Garífuna Day",
     "description": "Celebrating Afro-Caribbean Garífuna culture in Livingston, Izabal, this festival features punta dancing, traditional drumming, and authentic Garífuna cuisine including tapado and hudut. The celebration honors the arrival of Garífuna people to Guatemala and preserves their unique language, music, and customs.",
     "date": {
-      "start": "2025-11-26",
-      "end": "2025-11-26",
+      "start": "11-26",
+      "end": "11-26",
       "special": null
     },
     "image": "garifuna-day-livingston.webp"
@@ -73,8 +73,8 @@
     "name": "Fiesta de Santo Tomás (Chichicastenango)",
     "description": "Chichicastenango's patron saint festival combines Mayan and Catholic traditions with the Palo Volador ceremony where men swing from a tall pole. The famous market expands with additional vendors, traditional dances like the Baile de la Conquista are performed, and fireworks illuminate the church.",
     "date": {
-      "start": "2025-12-13",
-      "end": "2025-12-21",
+      "start": "12-13",
+      "end": "12-21",
       "special": null
     },
     "image": "santo-tomas-chichicastenango.webp"
@@ -83,8 +83,8 @@
     "name": "Carnaval de Mazatenango",
     "description": "One of Guatemala's largest carnival celebrations featuring elaborate floats, beauty pageants, street parties, and live music performances. Thousands gather in Mazatenango, Suchitepéquez for this pre-Lenten festival with colorful costumes, dancing, and traditional foods. The carnival rivals celebrations throughout Central America.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "02-22",
+      "end": "02-28",
       "special": "Week before Ash Wednesday"
     },
     "image": "carnaval-mazatenango.webp"
@@ -93,8 +93,8 @@
     "name": "Festival Folklorico Nacional",
     "description": "Cobán's national folklore festival showcases Guatemala's diverse indigenous cultures through traditional dances, music, and the election of Rabin Ajaw (Daughter of the King), representing Mayan beauty and culture. Regional groups compete displaying authentic trajes and performing ancestral dances preserving Guatemalan heritage.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "07-24",
+      "end": "07-31",
       "special": "Last week of July"
     },
     "image": "festival-folklorico-coban.webp"
@@ -103,8 +103,8 @@
     "name": "New Year's Eve (Año Nuevo)",
     "description": "Guatemalans welcome the new year with fireworks displays, family gatherings, and burning of Año Viejo effigies representing the past year. Traditional twelve grapes at midnight symbolize wishes for each month. Streets fill with celebrations, music, and festive meals featuring tamales and ponche.",
     "date": {
-      "start": "2025-12-31",
-      "end": "2026-01-01",
+      "start": "12-31",
+      "end": "01-01",
       "special": null
     },
     "image": "ano-nuevo-fireworks.webp"
@@ -113,8 +113,8 @@
     "name": "Esquipulas Black Christ Festival",
     "description": "Pilgrims from across Central America visit the Basilica of Esquipulas to venerate the Black Christ statue, believed to perform miracles. The festival includes religious processions, traditional foods, handicraft markets, and overnight vigils. This is one of the most important Catholic pilgrimages in Central America.",
     "date": {
-      "start": "2025-01-15",
-      "end": "2025-01-15",
+      "start": "01-15",
+      "end": "01-15",
       "special": null
     },
     "image": "cristo-negro-esquipulas.webp"
@@ -123,8 +123,8 @@
     "name": "Feria de Cobán",
     "description": "Alta Verapaz's patron saint festival celebrating Santo Domingo de Guzmán features the Rabin Ajaw pageant, marimba competitions, traditional dances, and regional gastronomy. The week-long celebration showcases Q'eqchi' Maya culture with indigenous ceremonies, coffee exhibitions, and orchid displays representative of the region.",
     "date": {
-      "start": "2025-08-01",
-      "end": "2025-08-06",
+      "start": "08-01",
+      "end": "08-06",
       "special": null
     },
     "image": "feria-coban.webp"
@@ -133,8 +133,8 @@
     "name": "Assumption of Mary (Virgen de la Asunción)",
     "description": "Guatemala City's patron saint celebration honors the Virgin Mary with religious processions from the Cathedral, traditional dances, and the famous Huelga de Dolores student parade. Colonial churches hold special masses while neighborhoods organize street festivals with food vendors and live entertainment.",
     "date": {
-      "start": "2025-08-15",
-      "end": "2025-08-15",
+      "start": "08-15",
+      "end": "08-15",
       "special": null
     },
     "image": "virgen-asuncion-guatemala.webp"
@@ -143,8 +143,8 @@
     "name": "Todos Santos Cuchumatán Horse Race",
     "description": "In Huehuetenango's highlands, indigenous Mam Maya celebrate All Saints Day with thrilling horse races where riders wear elaborate traditional costumes and consume alcohol while racing. This pre-Columbian tradition mixed with Catholic elements creates a unique cultural spectacle drawing photographers and anthropologists worldwide.",
     "date": {
-      "start": "2025-11-01",
-      "end": "2025-11-01",
+      "start": "11-01",
+      "end": "11-01",
       "special": null
     },
     "image": "todos-santos-horse-race.webp"
@@ -153,8 +153,8 @@
     "name": "Christmas (Navidad)",
     "description": "Guatemalan Christmas features the Quema del Diablo, posadas processions, elaborate nativity scenes, and midnight mass. Families prepare traditional tamales, ponche, and gather for La Cena de Nochebuena. Fireworks at midnight announce Christmas Day. Cities and towns display beautiful lights and decorations throughout December.",
     "date": {
-      "start": "2025-12-24",
-      "end": "2025-12-25",
+      "start": "12-24",
+      "end": "12-25",
       "special": null
     },
     "image": "navidad-guatemala.webp"
@@ -163,8 +163,8 @@
     "name": "Convite de San Juan",
     "description": "San Juan Sacatepéquez celebrates with traditional convites (processions) featuring giant puppets, elaborate costumes, and masked dancers. The celebration includes competitions between neighborhoods for the best floats and performances. This cultural expression preserves Kaqchikel Maya traditions through music and dance.",
     "date": {
-      "start": "2025-06-24",
-      "end": "2025-06-24",
+      "start": "06-24",
+      "end": "06-24",
       "special": null
     },
     "image": "convite-san-juan.webp"
@@ -173,8 +173,8 @@
     "name": "Feast of Corpus Christi",
     "description": "Catholic communities create intricate alfombras (sawdust carpets) in streets for religious processions carrying the Blessed Sacrament. Patzún is particularly famous for its elaborate designs. The tradition combines indigenous artistic expressions with Catholic liturgy, creating stunning temporary street art destroyed by procession passage.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "05-29",
+      "end": "05-29",
       "special": "Thursday after Trinity Sunday (60 days after Easter)"
     },
     "image": "corpus-christi-alfombras.webp"
@@ -183,8 +183,8 @@
     "name": "Labor Day (Día del Trabajo)",
     "description": "Workers' unions organize marches and demonstrations in Guatemala City and major towns demanding labor rights and better working conditions. The day honors workers' contributions to national development with rallies, cultural activities, and political speeches. Many businesses close allowing families to spend time together.",
     "date": {
-      "start": "2025-05-01",
-      "end": "2025-05-01",
+      "start": "05-01",
+      "end": "05-01",
       "special": null
     },
     "image": "dia-del-trabajo.webp"
@@ -193,8 +193,8 @@
     "name": "Quetzaltenango Fair (Feria de Xela)",
     "description": "Guatemala's second-largest city celebrates its patron saint Virgin of the Rosary with parades, concerts, traditional dances, sports competitions, and agricultural exhibitions. The fair features international artists, amusement rides, handicraft markets, and showcases highland Maya culture. Locals dress in traditional trajes for special occasions.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "09-15",
+      "end": "10-10",
       "special": "Mid-September through early October"
     },
     "image": "feria-quetzaltenango.webp"
@@ -203,8 +203,8 @@
     "name": "Burning of Judas (Quema de Judas)",
     "description": "On Easter Saturday, communities burn large papier-mâché effigies representing Judas Iscariot. These colorful figures often satirize politicians or unpopular public figures. Families gather as the effigies explode with fireworks inside them. This tradition marks the end of Holy Week and precedes Easter Sunday celebrations.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "04-19",
+      "end": "04-19",
       "special": "Holy Saturday (day before Easter Sunday)"
     },
     "image": "quema-de-judas.webp"
@@ -213,8 +213,8 @@
     "name": "Rabinal Achi Dance Drama Festival",
     "description": "This UNESCO-recognized pre-Columbian dance drama is performed in Rabinal, Baja Verapaz during the town's patron saint festival. The theatrical performance tells stories of Mayan warriors through music, dance, and elaborate costumes. It's one of the few surviving pre-Hispanic theatrical traditions in the Americas.",
     "date": {
-      "start": "2025-01-19",
-      "end": "2025-01-25",
+      "start": "01-19",
+      "end": "01-25",
       "special": null
     },
     "image": "rabinal-achi-festival.webp"
@@ -223,8 +223,8 @@
     "name": "Momostenango Wool Fair",
     "description": "Famous for its woolen blankets and textiles, Momostenango hosts this traditional fair showcasing local weaving techniques passed through generations. Artisans demonstrate traditional loom work, sell ponchos and blankets, and perform the sacred Mayan calendar ceremony of Wajxaqib' Batz'. The fair celebrates indigenous textile heritage.",
     "date": {
-      "start": "2025-07-25",
-      "end": "2025-07-25",
+      "start": "07-25",
+      "end": "07-25",
       "special": null
     },
     "image": "momostenango-wool-fair.webp"
@@ -233,8 +233,8 @@
     "name": "Huelga de Dolores (Strike of Sorrows)",
     "description": "University students in Guatemala City organize satirical parades mocking politicians and social issues during Lent. This tradition dates to the 19th century featuring creative floats, humorous publications called 'No Nos Tientes,' and peaceful protests. Students dress in black celebrating academic freedom through political satire.",
     "date": {
-      "start": null,
-      "end": null,
+      "start": "04-11",
+      "end": "04-11",
       "special": "Friday before Palm Sunday"
     },
     "image": "huelga-de-dolores.webp"
