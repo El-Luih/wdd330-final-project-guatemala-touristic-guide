@@ -54,12 +54,13 @@ function createEventCard(evt, imagePathPrefix = '/public/images/') {
 		const img = document.createElement('img');
 		img.className = 'event-card__image';
 		img.loading = 'lazy';
-		// prefer full path if provided; fall back to placeholder
+		// build image path using Vite BASE_URL so dev and prod resolve the same
+		const base = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/';
 		const imageFile = evt.image || '';
-		img.src = imagePathPrefix + imageFile;
+		img.src = imageFile ? `${base}images/events/${imageFile}` : `${base}images/placeholder-2x1.svg`;
 		img.alt = evt.name || 'Event image';
 		// on error, fallback to a stable placeholder present in src/public/images
-		img.onerror = () => { img.onerror = null; img.src = '/images/placeholder-2x1.svg'; };
+		img.onerror = () => { img.onerror = null; img.src = `${base}images/placeholder-2x1.svg`; };
 	card.appendChild(img);
 
 	const body = document.createElement('div');
@@ -159,7 +160,7 @@ async function loadAndRenderEvents() {
 		const monthIndex = startDate.getMonth();
 		const container = monthContainers[monthIndex];
 		if (!container) return;
-			const card = createEventCard(evt, '/images/events/');
+			const card = createEventCard(evt);
 		container.appendChild(card);
 	});
 }
