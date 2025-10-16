@@ -7,7 +7,9 @@
       "end": "04-20",
       "special": null
     },
-    "image": "semana-santa-antigua.webp"
+    "image": "semana-santa-antigua.webp",
+    "location": "Antigua Guatemala",
+    "category": "Religious"
   },
   {
     "name": "Día de los Muertos (Day of the Dead)",
@@ -17,7 +19,9 @@
       "end": "11-02",
       "special": null
     },
-    "image": "dia-de-los-muertos-kites.webp"
+    "image": "dia-de-los-muertos-kites.webp",
+    "location": "Santiago Sacatepéquez",
+    "category": "Cultural"
   },
   {
     "name": "Independence Day",
@@ -27,7 +31,9 @@
       "end": "09-15",
       "special": null
     },
-    "image": "independence-day-parade.webp"
+    "image": "independence-day-parade.webp",
+    "location": "Guatemala City",
+    "category": "National"
   },
   {
     "name": "Quema del Diablo (Burning of the Devil)",
@@ -37,7 +43,9 @@
       "end": "12-07",
       "special": null
     },
-    "image": "quema-del-diablo.webp"
+    "image": "quema-del-diablo.webp",
+    "location": "Nationwide",
+    "category": "Religious"
   },
   {
     "name": "Festival de Barriletes Gigantes (Giant Kite Festival)",
@@ -47,7 +55,9 @@
       "end": "11-01",
       "special": null
     },
-    "image": "barriletes-gigantes.webp"
+    "image": "barriletes-gigantes.webp",
+    "location": "Santiago Sacatepéquez",
+    "category": "Cultural"
   },
   {
     "name": "Feria de Jocotenango",
@@ -57,7 +67,9 @@
       "end": "08-07",
       "special": "First week of August"
     },
-    "image": "feria-jocotenango.webp"
+    "image": "feria-jocotenango.webp",
+    "location": "Jocotenango",
+    "category": "Fair"
   },
   {
     "name": "Livingston's Garífuna Day",
@@ -67,7 +79,9 @@
       "end": "11-26",
       "special": null
     },
-    "image": "garifuna-day-livingston.webp"
+    "image": "garifuna-day-livingston.webp",
+    "location": "Livingston",
+    "category": "Cultural"
   },
   {
     "name": "Fiesta de Santo Tomás (Chichicastenango)",
@@ -77,7 +91,9 @@
       "end": "12-21",
       "special": null
     },
-    "image": "santo-tomas-chichicastenango.webp"
+    "image": "santo-tomas-chichicastenango.webp",
+    "location": "Chichicastenango",
+    "category": "Religious"
   },
   {
     "name": "Carnaval de Mazatenango",
@@ -87,7 +103,9 @@
       "end": "02-28",
       "special": "Week before Ash Wednesday"
     },
-    "image": "carnaval-mazatenango.webp"
+    "image": "carnaval-mazatenango.webp",
+    "location": "Mazatenango",
+    "category": "Carnival"
   },
   {
     "name": "Festival Folklorico Nacional",
@@ -97,7 +115,9 @@
       "end": "07-31",
       "special": "Last week of July"
     },
-    "image": "festival-folklorico-coban.webp"
+    "image": "festival-folklorico-coban.webp",
+    "location": "Cobán",
+    "category": "Cultural"
   },
   {
     "name": "New Year's Eve (Año Nuevo)",
@@ -107,7 +127,9 @@
       "end": "01-01",
       "special": null
     },
-    "image": "ano-nuevo-fireworks.webp"
+    "image": "ano-nuevo-fireworks.webp",
+    "location": "Nationwide",
+    "category": "National"
   },
   {
     "name": "Esquipulas Black Christ Festival",
@@ -117,7 +139,9 @@
       "end": "01-15",
       "special": null
     },
-    "image": "cristo-negro-esquipulas.webp"
+    "image": "cristo-negro-esquipulas.webp",
+    "location": "Esquipulas",
+    "category": "Religious"
   },
   {
     "name": "Feria de Cobán",
@@ -127,7 +151,9 @@
       "end": "08-06",
       "special": null
     },
-    "image": "feria-coban.webp"
+    "image": "feria-coban.webp",
+    "location": "Cobán",
+    "category": "Fair"
   },
   {
     "name": "Assumption of Mary (Virgen de la Asunción)",
@@ -137,7 +163,9 @@
       "end": "08-15",
       "special": null
     },
-    "image": "virgen-asuncion-guatemala.webp"
+    "image": "virgen-asuncion-guatemala.webp",
+    "location": "Guatemala City",
+    "category": "Religious"
   },
   {
     "name": "Todos Santos Cuchumatán Horse Race",
@@ -147,7 +175,9 @@
       "end": "11-01",
       "special": null
     },
-    "image": "todos-santos-horse-race.webp"
+    "image": "todos-santos-horse-race.webp",
+    "location": "Todos Santos Cuchumatán",
+    "category": "Cultural"
   },
   {
     "name": "Christmas (Navidad)",
@@ -157,7 +187,9 @@
       "end": "12-25",
       "special": null
     },
-    "image": "navidad-guatemala.webp"
+    "image": "navidad-guatemala.webp",
+    "location": "Nationwide",
+    "category": "Religious"
   },
   {
     "name": "Convite de San Juan",
@@ -167,7 +199,9 @@
       "end": "06-24",
       "special": null
     },
-    "image": "convite-san-juan.webp"
+    "image": "convite-san-juan.webp",
+    "location": "San Juan Sacatepéquez",
+    "category": "Cultural"
   },
   {
     "name": "Feast of Corpus Christi",
@@ -177,7 +211,9 @@
       "end": "05-29",
       "special": "Thursday after Trinity Sunday (60 days after Easter)"
     },
-    "image": "corpus-christi-alfombras.webp"
+    "image": "corpus-christi-alfombras.webp",
+    "location": "Patzún",
+    "category": "Religious"
   },
   {
     "name": "Labor Day (Día del Trabajo)",
@@ -187,7 +223,9 @@
       "end": "05-01",
       "special": null
     },
-    "image": "dia-del-trabajo.webp"
+    "image": "dia-del-trabajo.webp",
+    "location": "Guatemala City",
+    "category": "National"
   },
   {
     "name": "Quetzaltenango Fair (Feria de Xela)",
@@ -197,7 +235,9 @@
       "end": "10-10",
       "special": "Mid-September through early October"
     },
-    "image": "feria-quetzaltenango.webp"
+    "image": "feria-quetzaltenango.webp",
+    "location": "Quetzaltenango",
+    "category": "Fair"
   },
   {
     "name": "Burning of Judas (Quema de Judas)",
@@ -207,7 +247,9 @@
       "end": "04-19",
       "special": "Holy Saturday (day before Easter Sunday)"
     },
-    "image": "quema-de-judas.webp"
+    "image": "quema-de-judas.webp",
+    "location": "Nationwide",
+    "category": "Religious"
   },
   {
     "name": "Rabinal Achi Dance Drama Festival",
@@ -217,7 +259,9 @@
       "end": "01-25",
       "special": null
     },
-    "image": "rabinal-achi-festival.webp"
+    "image": "rabinal-achi-festival.webp",
+    "location": "Rabinal",
+    "category": "Cultural"
   },
   {
     "name": "Momostenango Wool Fair",
@@ -227,7 +271,9 @@
       "end": "07-25",
       "special": null
     },
-    "image": "momostenango-wool-fair.webp"
+    "image": "momostenango-wool-fair.webp",
+    "location": "Momostenango",
+    "category": "Fair"
   },
   {
     "name": "Huelga de Dolores (Strike of Sorrows)",
@@ -237,6 +283,8 @@
       "end": "04-11",
       "special": "Friday before Palm Sunday"
     },
-    "image": "huelga-de-dolores.webp"
+    "image": "huelga-de-dolores.webp",
+    "location": "Guatemala City",
+    "category": "Cultural"
   }
 ]
