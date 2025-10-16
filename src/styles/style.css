@@ -564,16 +564,166 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 	All rules scoped to .favorites-page
 ========================= */
 
-.favorites-page .destinations-module,
-.favorites-page .restaurants-module {
+/* Grid layout - mobile first (single column) */
+.favorites-page .grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "search"
+    "destinations"
+    "restaurants";
+  gap: 16px;
   padding: 16px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Search module */
+.favorites-page .search-module {
+  grid-area: search;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.favorites-page .search-module label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.favorites-page .search-module .field-name {
+  font-family: var(--secondary-font);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.favorites-page .search-module input[type="text"],
+.favorites-page .search-module select {
+  font-family: var(--primary-font);
+  padding: 8px 12px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+.favorites-page .search-module fieldset {
+  border: 1px solid var(--secondary-color);
+  padding: 8px 12px;
+}
+
+.favorites-page .search-module legend {
+  padding: 0 8px;
+}
+
+.favorites-page .search-module .grid.radio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.favorites-page .search-module .grid.radio label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--text-color);
+  font-family: var(--primary-font);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+  min-height: 32px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.favorites-page .search-module .grid.radio label:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.favorites-page .search-module .grid.radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.favorites-page .search-module .grid.radio input[type="radio"]:checked + span,
+.favorites-page .search-module .grid.radio label:has(input[type="radio"]:checked) {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Modules */
+.favorites-page .destinations-module {
+  grid-area: destinations;
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  padding: 16px;
+  position: relative;
+}
+
+.favorites-page .restaurants-module {
+  grid-area: restaurants;
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  padding: 16px;
+  position: relative;
+}
+
+.favorites-page .destinations-module h2,
+.favorites-page .restaurants-module h2 {
+  font-family: var(--secondary-font);
+  margin: 0 0 12px 0;
+  padding-right: 100px;
+}
+
+/* Explore buttons */
+.favorites-page .explore.button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  background: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  transition: background-color 120ms ease, color 120ms ease, box-shadow 150ms ease;
+}
+
+.favorites-page .explore.button:hover,
+.favorites-page .explore.button:focus-visible {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 8px var(--secondary-color-30);
 }
 
 .favorites-page .container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  margin-top: 12px;
+  max-height: 1000px;
+  overflow-y: auto;
 }
 
 /* Reuse result-card styling from destinations page for favorites */
@@ -1191,9 +1341,17 @@ footer #social-media img { width: 44px; height: auto; }
   }
   
   /* Favorites page: two-column grid on desktop */
-  .favorites-page .container {
-    grid-template-columns: repeat(2, 1fr);
+  .favorites-page .grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "search search"
+      "destinations restaurants";
     gap: 16px;
+  }
+  
+  .favorites-page .search-module {
+    max-width: 400px;
+    margin: 0 auto;
   }
   
   /* Cuisine page: two-column layout - search module left (1fr), map right (2fr) */
@@ -1255,10 +1413,8 @@ footer #social-media img { width: 44px; height: auto; }
     grid-template-columns: repeat(3, 1fr);
   }
   
-  /* Favorites page: three-column grid on ultra-wide */
-  .favorites-page .container {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  /* Favorites page: keep two-column layout on ultra-wide (search spans both) */
+  /* No change needed - stays 2 columns */
   
   /* Cuisine page: ultra-wide layout - search module 1fr, map 3fr */
   .cuisine-page .grid {
