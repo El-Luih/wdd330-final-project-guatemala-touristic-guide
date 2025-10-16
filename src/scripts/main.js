@@ -1,11 +1,18 @@
 import { loadHeaderFooter, isFavorite, toggleFavorite } from './util.mjs';
 import OpenMeteoAPI from './OpenMeteoAPI.mjs';
 import { dailySummary, WEATHER_ICONS } from './WeatherDetails.mjs';
-/*import { REGION_VIEWS, DEFAULT_COUNTRY_VIEW } from './MapConfig.mjs';
+
+// Insert header as early as possible to avoid perceived delay
+(() => {
+	const mount = () => { try { loadHeaderFooter(); } catch (e) {} };
+	if (document.readyState !== 'loading') mount();
+	else document.addEventListener('DOMContentLoaded', mount, { once: true });
+})();
+import { REGION_VIEWS, DEFAULT_COUNTRY_VIEW } from './MapConfig.mjs';
 import { addRegionToUrlString, getActiveRegionFromUI, getRegionFromQuery, applyRegionToUI } from './RegionState.mjs';
 import PlacesAPI from './PlacesAPI.mjs';
 import { attractionCard } from './PlaceDetails.mjs';
-import { restaurantCard } from './RestaurantDetails.mjs';*/
+import { restaurantCard } from './RestaurantDetails.mjs';
 
 // Main page: weather gadget wiring.
 // Behavior:
@@ -115,7 +122,6 @@ function wireExploreButtons() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	loadHeaderFooter();
 	setupMainRegionButtons();
 	// ensure current button is highlighted according to query
 	let incoming = 'All'; try { const r = getRegionFromQuery(); if (r) incoming = r; } catch (e) {}

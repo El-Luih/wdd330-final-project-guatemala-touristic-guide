@@ -1,3 +1,7 @@
+// Inline partials at build time to avoid runtime fetch delays
+// Note: Vite does not allow importing from public/. Use src/partials instead.
+import headerTemplate from '../partials/header.html?raw';
+import footerTemplate from '../partials/footer.html?raw';
 // Asynchronously loads the header and footer using fetch and await.
 // Works in both development and production (after Vite build) by relying on import.meta.env.BASE_URL.
 export async function loadHeaderFooter() {
@@ -6,22 +10,12 @@ export async function loadHeaderFooter() {
     const footerElement = document.getElementById('dynamic-footer');
     const base = import.meta.env.BASE_URL;
     try {
-        // Retrieves the header and footer partial templates.
-    const header = await fetch(`${base}/partials/header.html`);
-    const footer = await fetch(`${base}/partials/footer.html`);
-    // NOTE for reviewers: console logs here are intentional to show fetch
-    // responses for partials during evaluation/demo.
-    try { console.log('loadHeaderFooter fetch', { header: { ok: header.ok, status: header.status }, footer: { ok: footer.ok, status: footer.status } }); } catch (e) {}
-    if (!header.ok || !footer.ok) throw new Error(`Partial not found`);
-    // Converts the templates to text and inserts their content into the target elements.
-    const headerHtml = await header.text();
-    const footerHtml = await footer.text();
-        headerElement.innerHTML = headerHtml;
-        footerElement.innerHTML = footerHtml;
+        // Insert header immediately from inlined template (no network).
+        headerElement.innerHTML = headerTemplate || '<header><a id="header-banner"><img id="main-logo" alt="" /><span id="header-name"></span></a><button id="main-hamburger" aria-label="Drop Down Menu"></button><nav id="header-menu"><ul></ul></nav></header>';
 
-        // Sets the appropriate href attributes using the base URL.
-        headerElement.querySelector('#main-logo').setAttribute('src', `${base}/images/gtg-icon.svg`);
-        headerElement.querySelector('#header-banner').setAttribute('href', `${base}/index.html`);
+    // Sets the appropriate href attributes using the base URL (after header is inserted).
+    try { headerElement.querySelector('#main-logo').setAttribute('src', `${base}/images/gtg-icon.svg`); } catch (e) {}
+    try { headerElement.querySelector('#header-banner').setAttribute('href', `${base}/index.html`); } catch (e) {}
 
         // Selects all <a> elements in the navigation menu and assigns each an href based on its "data-page" attribute.
         const navLinks = headerElement.querySelector('#header-menu').querySelectorAll('a');
@@ -97,6 +91,21 @@ export async function loadHeaderFooter() {
             // non-fatal
             console.warn('Hamburger wiring failed', e);
         }
+
+        // Insert footer from inlined template (no network).
+        try {
+            footerElement.innerHTML = footerTemplate || '';
+            const socialIcons = footerElement.querySelector('#social-media').querySelectorAll('img');
+            socialIcons.forEach(function (icon) {
+                const name = icon.dataset.name;
+                icon.setAttribute('src', `${base}/images/${name}.svg`)})
+            // Populate current year in footer
+            try {
+                const y = new Date().getFullYear();
+                const span = footerElement.querySelector('#currentYear');
+                if (span) span.textContent = String(y);
+            } catch (e) {}
+        } catch (e) { console.warn('Footer insertion failed', e); }
     } catch (error) {
         console.error('Error loading partial: ', error);
     }
