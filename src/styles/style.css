@@ -2,94 +2,230 @@
 	Layout & Utilities
 	(grouped by component for readability)
 	======================== */
-
 /* Aspect ratio helpers */
-.ratio-2x1 {
-  position: relative;
-  width: 100%;
-  padding-top: 50%;
-  overflow: hidden;
-  background: #f5f5f5;
+:root{
+  --primary-color: #fff;
+  --secondary-color: #4897d0;
+  --accent-color-1: #448127;
+  --accent-color-2: #ff7d08;
+  --text-color: #000;
+  --primary-font: "Montserrat", sans-serif;
+  --secondary-font: "Playfair Display", serif;
+  /* Utility: semi-transparent secondary for soft inner shadows */
+  --secondary-color-30: rgb(72 151 208 / 30%);
+  /* Utility: semi-transparent primary for hero overlays */
+  --primary-color-60: rgb(255 255 255 / 60%);
 }
-.ratio-2x1 img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
-.ratio-1x1 {
+/*MOBILE VIEW*/
+
+/* Global typography: primary font by default, secondary for headings/titles */
+html, body { font-family: var(--primary-font); color: var(--text-color); }
+h1, h2, h3, h4, h5, h6, .title, .heading { font-family: var(--secondary-font); }
+
+/* Hero: full-bleed background image with overlay and centered content */
+article.hero {
   position: relative;
-  width: 100%;
-  padding-top: 100%;
+  width: 100vw;
+  max-width: 100vw; /* never exceed viewport width */
+  left: 50%;
+  transform: translateX(-50%);
   overflow: hidden;
-  background: #f5f5f5;
+  min-height: 40vh; /* mobile height */
+  display: grid;
+  place-items: center; /* center title/flavor horizontally + vertically */
+  color: var(--text-color);
 }
-.ratio-1x1 img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+article.hero picture { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+article.hero picture img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+article.hero::after { content: ""; position: absolute; inset: 0; background: var(--primary-color-60); z-index: 1; }
+/* Hero title + flavor baseline */
+article.hero .title { margin: 0; padding: 0 16px; text-align: center; font-size: 2.5rem; z-index: 2; position: relative; }
+article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; }
 
-/* ========================
-	Result cards
-	.result-card { ... }
-	======================== */
-.result-card {
+/* Fade-in animation for hero title and flavor */
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+article.hero .title { opacity: 0; animation: heroFadeIn 600ms ease-out 150ms forwards; }
+article.hero .title .flavor { opacity: 0; animation: heroFadeIn 600ms ease-out 350ms forwards; }
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  article.hero .title, article.hero .title .flavor { animation: none; opacity: 1; }
+}
+
+/* Header (mobile-first): primary bg, bottom border in secondary color
+   Note: partials inject a <header> inside #dynamic-header */
+#dynamic-header > header {
+  background: var(--primary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  color: var(--text-color);
+  padding: 10px 12px;
+  display: grid;
+  /* Mobile: static logo space | auto title | static hamburger */
+  grid-template-columns: 64px auto 40px; /* logo | title | hamburger */
+  align-items: center;
+  gap: 8px;
+}
+
+/* Logo (image). If a text logo is used, inherit heading font via a wrapping element/class if desired */
+#dynamic-header #main-logo {
+  width: 100%; /* fill the static logo column */
+  height: auto;
+  justify-self: start;
+}
+
+/* Title centered using secondary font */
+#dynamic-header #header-banner {
+  /* span logo+title columns on mobile so the hamburger sits in col 3 */
+  grid-column: 1 / span 2;
+  display: grid;
+  grid-template-columns: 64px 1fr; /* static logo space + flexible title */
+  align-items: center;
+  gap: 8px;
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+/* Mobile: title always centered in its space and set to 1.5rem */
+#dynamic-header #header-name {
+  justify-self: center;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* Subtle hover bounce toward the viewer for logo and title */
+#dynamic-header #main-logo,
+#dynamic-header #header-name {
+  transition: transform 180ms ease;
+  transform-origin: center;
+  will-change: transform;
+}
+#dynamic-header #main-logo:hover,
+#dynamic-header #header-name:hover {
+  transform: scale(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #dynamic-header #main-logo,
+  #dynamic-header #header-name { transition: none; }
+}
+
+/* Hamburger: visible by default on mobile */
+#dynamic-header #main-hamburger {
+  justify-self: end;
+  width: 40px; /* match static grid column */
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+#dynamic-header #main-hamburger::before { content: "\2630"; } /* ☰ */
+#dynamic-header #main-hamburger[aria-expanded="true"]::before { content: "\00D7"; } /* × */
+
+/* Navigation (mobile): hidden until opened, then vertical column of equal-width buttons */
+#dynamic-header #header-menu { display: none; grid-column: 1 / -1; margin-top: 8px; }
+#dynamic-header #header-menu ul { list-style: none; margin: 0; padding: 0; }
+#dynamic-header #header-menu li { margin: 0; padding: 0; }
+#dynamic-header #header-menu.open { display: block; width: 100%; }
+#dynamic-header #header-menu.open ul { display: flex; flex-direction: column; width: 100%; }
+#dynamic-header #header-menu a {
   display: flex;
-  flex-direction: column;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 8px;
-  background: #fff;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  background: var(--secondary-color);
+  padding: 10px 12px;
+  border-top: 1px solid var(--primary-color); /* thin separators */
 }
-.result-card .card-body { padding: 8px; }
-.result-card .card-body h3 { margin: 0 0 6px 0; font-size: 1rem; }
+#dynamic-header #header-menu a:first-child { border-top: none; }
+#dynamic-header #header-menu a.current { outline: 2px solid var(--accent-color-2); outline-offset: -2px; }
+#dynamic-header #header-menu a:hover { filter: brightness(0.95); }
+#dynamic-header #header-menu a:focus-visible { outline: 2px dashed var(--accent-color-1); outline-offset: 2px; }
 
-.card-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
-.tag { background:#eee; padding:4px 6px; border-radius:4px; font-size:0.8rem; }
 
-.card-status { font-size:0.85rem; color:#666; margin-bottom:8px; }
-.card-actions { display:flex; gap:8px; align-items:center; }
+/*DESKTOP VIEW*/
+@media screen and (min-width: 800px) {
+  /* Hero: increase height on desktop */
+  article.hero { min-height: 50vh; }
+  /* Hero typography on desktop */
+  article.hero .title { font-size: 3rem; }
+  article.hero .title .flavor { font-size: 1.5rem; }
+  /* Header layout: logo | title | nav to the right */
+  #dynamic-header > header {
+    /* Desktop: vw column for logo, then 1fr for title and 1fr for nav */
+    grid-template-columns: minmax(64px, 8vw) 2fr 1fr;
+    padding: 14px 20px;
+  }
+  #dynamic-header #main-hamburger { display: none; }
+  /* Banner spans logo+title columns; inside, split logo vw and title 1fr */
+  #dynamic-header #header-banner {
+    grid-column: 1 / span 2;
+    display: grid;
+    grid-template-columns: minmax(64px, 8vw) 1fr;
+    align-items: center;
+  }
+  /* Restore normal static positioning for header-name on desktop and keep centered */
+  #dynamic-header #header-name {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    pointer-events: auto;
+    justify-self: center;
+    text-align: center;
+    font-size: 2.1rem; /* desktop title size */
+  }
+  /* Logo fills its internal vw column on desktop */
+  #dynamic-header #main-logo { width: 100%; max-width: 100px; height: auto; }
 
-.fav-button { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; }
-
-/* Small variant for main page where fewer details are shown */
-.small-card { padding:6px; display:flex; gap:8px; align-items:center; }
-
-/* ========================
-	Filters & Buttons
-	======================== */
-.filtering-buttons { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
-.filter-button { border:1px solid #ccc; background:#fff; padding:6px 10px; border-radius:4px; cursor:pointer; }
-.filter-button.active { background:#1976d2; color:#fff; border-color:#1976d2; }
-
-/* ========================
-	Weather gadget
-	======================== */
-.gadget .weather { padding:8px; background:#fff; border-radius:6px; }
-.gadget .weather h2 { margin-top:0; }
-.gadget .weather div[id^="weather-"] { display:flex; align-items:center; gap:8px; margin:6px 0; }
-.gadget .weather img { display:block; }
-
-/* Ensure the map container has height so the map can render */
-.map { min-height: 360px; background: #eee; border-radius:6px; }
-
-/* small helpers */
-.card-media img { display:block; width:100%; height:100%; object-fit:cover; }
-
-/* Main page mini event cards */
-.mini-event-card {
-  display:flex;
-  align-items:center;
-  padding:8px 12px;
-  margin:6px 0;
-  background:#fff;
-  border-radius:4px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.03) inset;
+  /* Desktop nav: single row, buttons equal width/height */
+  #dynamic-header #header-menu { display: block !important; margin-top: 0; grid-column: 3; }
+  /* Force desktop layout even if mobile 'open' class remains */
+  #dynamic-header #header-menu.open { display: block !important; width: auto; }
+  #dynamic-header #header-menu ul {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: 0; /* borders will provide separation */
+  }
+  #dynamic-header #header-menu.open ul { display: flex; flex-direction: row; width: auto; }
+  #dynamic-header #header-menu a {
+    height: 36px;            /* smaller height */
+    min-width: 90px;         /* smaller min width */
+    padding: 0 1rem;         /* tighter padding */
+    font-size: 0.95rem;      /* slightly smaller text */
+    border-top: none;
+    border-left: 1px solid var(--primary-color);
+    /* auto content width to avoid oversized buttons */
+    flex: 0 0 auto;
+    transition: background-color 120ms ease, color 120ms ease, box-shadow 150ms ease, border-color 120ms ease, filter 120ms ease;
+  }
+  /* Desktop hover/focus: primary background, secondary border look, soft inner shadow */
+  #dynamic-header #header-menu a:hover,
+  #dynamic-header #header-menu a:focus-visible {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    /* Draw a subtle full border via inner shadow, plus soft glow */
+    box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 10px var(--secondary-color-30);
+    /* Ensure any mobile hover filter does not alter white */
+    filter: none;
+  }
+  #dynamic-header #header-menu a:first-child { border-left: 1px solid var(--primary-color); }
 }
-.mini-event__left { padding-left:12px; }
-.mini-event__name { font-weight:600; font-size:0.95rem; }
-.mini-event__date { color:#666; font-size:0.85rem; }
 
-/* thick left border indicating status */
-.mini-event-card.mini-event--past { border-left: 8px solid #d32f2f; }
-.mini-event-card.mini-event--upcoming { border-left: 8px solid #9e9e9e; }
-.mini-event-card.mini-event--ongoing { border-left: 8px solid #388e3c; }
-
-/* empty state for events gadget */
-.no-events { padding: 12px; color: #666; font-style: italic; }
-
-
+/*ULTRA WIDE VIEW*/
+@media screen and (min-width: 1500px) {
+  /* Hero: increase height on ultra-wide */
+  article.hero { min-height: 60vh; }
+}

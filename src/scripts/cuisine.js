@@ -1,7 +1,7 @@
 import { loadHeaderFooter, debounce, isFavorite, toggleFavorite, loadFavorites } from './util.mjs';
-import PlacesAPI from './PlacesAPI.mjs';
+/*import PlacesAPI from './PlacesAPI.mjs';
 import GoogleMapsAPI from './GoogleMapsAPI.mjs';
-import { createRestaurantCard, ensureImageObserver } from './cardRenderer.mjs';
+import { createRestaurantCard, ensureImageObserver } from './cardRenderer.mjs';*/
 import { REGION_VIEWS, DEFAULT_COUNTRY_VIEW } from './MapConfig.mjs';
 import { addRegionToUrlString, getRegionFromQuery, applyRegionToUI } from './RegionState.mjs';
 
