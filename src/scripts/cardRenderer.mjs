@@ -12,8 +12,8 @@ if (typeof window !== 'undefined') {
 }
 
 // Master delay before starting retries (ms) and stagger between individual retries (ms)
-const RETRY_MASTER_DELAY = 10000; // 10s
-const RETRY_STAGGER_MS = 800; // 0.8s between each retry
+const RETRY_MASTER_DELAY = 15000; // 15s (increased from 10s)
+const RETRY_STAGGER_MS = 1200; // 1.2s between each retry (increased from 0.8s)
 
 function schedulePhotoRefRetry(img, photoRef) {
   try {
@@ -53,7 +53,7 @@ function schedulePhotoRefRetry(img, photoRef) {
               // Enqueue through the serialized PhotoRefQueue which will fetch blob, cache it and
               // set the image src when available. Provide googleKey and caching options.
               try {
-                photoRefQueue.enqueuePhotoRef(retryImg, ref, { googleKey, baseDelay: 2000, maxRetries: 3, ttlMs: 60 * 60 * 1000 });
+                photoRefQueue.enqueuePhotoRef(retryImg, ref, { googleKey, baseDelay: 4000, maxRetries: 2, ttlMs: 60 * 60 * 1000 });
               } catch (e) {}
             } catch (e) {}
           }, delay);

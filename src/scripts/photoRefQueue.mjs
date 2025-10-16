@@ -5,7 +5,7 @@ import { imageLoader } from './util.mjs';
 // Exports: enqueuePhotoRef(imgElement, photoRef, opts)
 
 const DEFAULTS = {
-  baseDelay: 2500, // ms (increased to be more conservative)
+  baseDelay: 4000, // ms (increased to 4s to be more conservative)
   maxRetries: 2,
   ttlMs: 60 * 60 * 1000, // 1 hour cache TTL for blobs
 };
@@ -13,9 +13,9 @@ const DEFAULTS = {
 // Per-session budget to limit how many photo_ref blob fetches we'll perform
 // in a single browsing session (helps in incognito/cold-start scenarios).
 const SESSION_BUDGET_KEY = '__photoRefSessionBudget_v1';
-const DEFAULT_SESSION_BUDGET = 20; // allow 20 photo blob fetches per session by default
+const DEFAULT_SESSION_BUDGET = 15; // allow 15 photo blob fetches per session (reduced from 20)
 // Per-page automatic enqueue limit: how many images the page may auto-fetch
-const DEFAULT_SESSION_AUTO_LIMIT = 6; // default automatic loads per page
+const DEFAULT_SESSION_AUTO_LIMIT = 4; // default automatic loads per page (reduced from 6)
 
 function loadSessionBudget() {
   try {
@@ -111,8 +111,8 @@ async function processQueue() {
           continue;
         }
       } catch (e) {}
-      // throttle between successive network fetches
-      await sleep(200 + Math.round(Math.random() * 300));
+      // throttle between successive network fetches - increased delay
+      await sleep(800 + Math.round(Math.random() * 700)); // 800-1500ms delay
       // fetch as blob (inline so we can inspect status and record host failures)
       let resp;
       try {
