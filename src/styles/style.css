@@ -42,9 +42,14 @@ article.hero::after { content: ""; position: absolute; inset: 0; background: var
 article.hero .title { margin: 0; padding: 0 16px; text-align: center; font-size: 2.5rem; z-index: 2; position: relative; }
 article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; }
 
+/* ========================
+	MAIN PAGE STYLES
+	All rules scoped to .main-page
+========================= */
+
 /* Search module (main page): mobile-first */
-.search-module { padding: 12px 16px; }
-.search-module .filtering-buttons {
+.main-page .search-module { padding: 12px 16px; }
+.main-page .search-module .filtering-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +59,7 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
   scroll-snap-type: x proximity;
   padding-bottom: 4px;
 }
-.search-module .filtering-buttons button {
+.main-page .search-module .filtering-buttons button {
   font-family: var(--primary-font);
   color: var(--secondary-color);
   background: var(--primary-color);
@@ -70,36 +75,32 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
   scroll-snap-align: start;
   transition: background-color 120ms ease, color 120ms ease, box-shadow 150ms ease, border-color 120ms ease, transform 120ms ease;
 }
-.search-module .filtering-buttons button:hover { background: var(--secondary-color); color: var(--primary-color); }
-.search-module .filtering-buttons button:focus-visible { outline: 2px dashed var(--accent-color-1); outline-offset: 2px; }
-.search-module .filtering-buttons button:active { transform: translateY(1px) scale(0.99); }
-.search-module .filtering-buttons button.current {
+.main-page .search-module .filtering-buttons button:hover { background: var(--secondary-color); color: var(--primary-color); }
+.main-page .search-module .filtering-buttons button:focus-visible { outline: 2px dashed var(--accent-color-1); outline-offset: 2px; }
+.main-page .search-module .filtering-buttons button:active { transform: translateY(1px) scale(0.99); }
+.main-page .search-module .filtering-buttons button.current {
   background: var(--secondary-color);
   color: var(--primary-color);
   box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 8px var(--secondary-color-30);
 }
 
-/* ========================
-	Main page gadgets & cards
-========================= */
-
 /* Gadgets container layout */
-.gadget-module { display: grid; gap: 16px; padding: 8px 16px; width: 100%; max-width: 1500px; margin-left: auto; margin-right: auto; box-sizing: border-box; }
-.gadget-module .right { display: grid; gap: 16px; }
+.main-page .gadget-module { display: grid; gap: 16px; padding: 8px 16px; width: 100%; max-width: 1500px; margin-left: auto; margin-right: auto; box-sizing: border-box; }
+.main-page .gadget-module .right { display: grid; gap: 16px; }
 
 /* Gadget shell */
-.gadget {
+.main-page .gadget {
   background: var(--primary-color);
   border: 1px solid var(--secondary-color);
   padding: 12px;
   position: relative; /* allow absolute-positioned Explore button */
 }
-.gadget h2 { margin: 0 0 8px; font-family: var(--secondary-font); }
+.main-page .gadget h2 { margin: 0 0 8px; font-family: var(--secondary-font); }
 /* Reserve space so the H2 text doesn't run under the Explore button */
-.gadget h2 { padding-right: 120px; }
+.main-page .gadget h2 { padding-right: 120px; }
 
 /* Explore buttons */
-a.explore.button {
+.main-page a.explore.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -113,18 +114,18 @@ a.explore.button {
   border: 1px solid var(--secondary-color);
   transition: background-color 120ms ease, color 120ms ease, box-shadow 150ms ease;
 }
-a.explore.button { position: static; }
+.main-page a.explore.button { position: static; }
 /* In gadgets, pin the Explore button to the top-right corner */
-.gadget > a.explore.button { position: absolute; top: 12px; right: 12px; z-index: 2; }
-a.explore.button:hover,
-a.explore.button:focus-visible { background: var(--primary-color); color: var(--secondary-color); box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 8px var(--secondary-color-30); }
+.main-page .gadget > a.explore.button { position: absolute; top: 12px; right: 12px; z-index: 2; }
+.main-page a.explore.button:hover,
+.main-page a.explore.button:focus-visible { background: var(--primary-color); color: var(--secondary-color); box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 8px var(--secondary-color-30); }
 
 /* Card grids */
-.destinations.container,
-.restaurants.container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.main-page .destinations.container,
+.main-page .restaurants.container { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 
 /* Small card */
-article.small-card {
+.main-page article.small-card {
   background: var(--primary-color);
   border: 1px solid var(--secondary-color);
   display: grid;
@@ -132,47 +133,47 @@ article.small-card {
   padding: 8px;
   position: relative;
 }
-article.small-card h4 { margin: 0; font-family: var(--secondary-font); text-align: center; }
-article.small-card .fav-button { justify-self: end; height: 28px; padding: 0 8px; border: 1px solid var(--secondary-color); border-right: none; border-top: none; background: var(--primary-color); color: var(--secondary-color); cursor: pointer; position: absolute; top: 0; right: 0;}
-article.small-card .fav-button:hover { background: var(--secondary-color); color: var(--primary-color); }
+.main-page article.small-card h4 { margin: 0; font-family: var(--secondary-font); text-align: center; }
+.main-page article.small-card .fav-button { justify-self: end; height: 28px; padding: 0 8px; border: 1px solid var(--secondary-color); border-right: none; border-top: none; background: var(--primary-color); color: var(--secondary-color); cursor: pointer; position: absolute; top: 0; right: 0;}
+.main-page article.small-card .fav-button:hover { background: var(--secondary-color); color: var(--primary-color); }
 
 /* Card media aspect ratios */
-.card-media { position: relative; overflow: hidden; background: var(--primary-color); }
-.ratio-2x1 { aspect-ratio: 2 / 1; }
-.ratio-1x1 { aspect-ratio: 1 / 1; }
-.card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.main-page .card-media { position: relative; overflow: hidden; background: var(--primary-color); }
+.main-page .ratio-2x1 { aspect-ratio: 2 / 1; }
+.main-page .ratio-1x1 { aspect-ratio: 1 / 1; }
+.main-page .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* Events gadget: mini rows */
-.events.container.table { display: grid; gap: 8px; }
-article.mini-event-card {
+.main-page .events.container.table { display: grid; gap: 8px; }
+.main-page article.mini-event-card {
   background: var(--primary-color);
   border: 1px solid var(--secondary-color);
   padding: 10px 12px;
   display: grid;
   grid-template-columns: 1fr;
 }
-article.mini-event-card .mini-event__name { font-family: var(--secondary-font); }
-article.mini-event-card .mini-event__date { font-family: var(--primary-font); }
-article.mini-event-card.mini-event--upcoming { border-left: 6px solid var(--secondary-color); }
-article.mini-event-card.mini-event--ongoing { border-left: 6px solid var(--accent-color-2); }
-article.mini-event-card.mini-event--past { border-left: 6px solid var(--accent-color-1); opacity: 0.9; }
+.main-page article.mini-event-card .mini-event__name { font-family: var(--secondary-font); }
+.main-page article.mini-event-card .mini-event__date { font-family: var(--primary-font); }
+.main-page article.mini-event-card.mini-event--upcoming { border-left: 6px solid var(--secondary-color); }
+.main-page article.mini-event-card.mini-event--ongoing { border-left: 6px solid var(--accent-color-2); }
+.main-page article.mini-event-card.mini-event--past { border-left: 6px solid var(--accent-color-1); opacity: 0.9; }
 
 /* Weather gadget layout */
 /* Arrange the three days horizontally in all views */
-.gadget.weather {
+.main-page .gadget.weather {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   align-items: stretch;
 }
 /* Make the section title and region label span full width */
-.gadget.weather > h2,
-.gadget.weather > #weather-region { grid-column: 1 / -1; }
-.gadget.weather > #weather-region { justify-self: center; margin-top: 4px; text-align: center; }
+.main-page .gadget.weather > h2,
+.main-page .gadget.weather > #weather-region { grid-column: 1 / -1; }
+.main-page .gadget.weather > #weather-region { justify-self: center; margin-top: 4px; text-align: center; }
 /* Each day card: vertical stack -> day, icon, temperature; centered */
-.gadget.weather #weather-0,
-.gadget.weather #weather-1,
-.gadget.weather #weather-2 {
+.main-page .gadget.weather #weather-0,
+.main-page .gadget.weather #weather-1,
+.main-page .gadget.weather #weather-2 {
   background: var(--primary-color);
   padding: 8px;
   display: flex;
@@ -183,9 +184,9 @@ article.mini-event-card.mini-event--past { border-left: 6px solid var(--accent-c
   text-align: center;
 }
 /* Tighten day title spacing inside the cards */
-.gadget.weather #weather-0 h4,
-.gadget.weather #weather-1 h4,
-.gadget.weather #weather-2 h4 { margin: 0; }
+.main-page .gadget.weather #weather-0 h4,
+.main-page .gadget.weather #weather-1 h4,
+.main-page .gadget.weather #weather-2 h4 { margin: 0; }
 
 /* Fade-in animation for hero title and flavor */
 @keyframes heroFadeIn {
@@ -315,17 +316,17 @@ footer #social-media img { width: 44px; height: auto; }
   article.hero .title { font-size: 3rem; }
   article.hero .title .flavor { font-size: 1.5rem; }
   
-  /* Search module desktop: wrap and center */
-  .search-module { padding: 16px 20px; }
-  .search-module .filtering-buttons { overflow: visible; flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .search-module .filtering-buttons button { height: 38px; padding: 8px 16px; }
+  /* Main page: Search module desktop: wrap and center */
+  .main-page .search-module { padding: 16px 20px; }
+  .main-page .search-module .filtering-buttons { overflow: visible; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .main-page .search-module .filtering-buttons button { height: 38px; padding: 8px 16px; }
   
-  /* Gadget module: two-column layout */
-  .gadget-module { grid-template-columns: 2fr 1fr; align-items: stretch; margin-bottom: 2rem; }
-  .gadget-module .right { grid-template-rows: 1fr 1fr; height: 100%; min-height: 0; grid-auto-rows: 1fr; }
-  .gadget-module .right > .gadget { height: 100%; min-height: 0; }
+  /* Main page: Gadget module: two-column layout */
+  .main-page .gadget-module { grid-template-columns: 2fr 1fr; align-items: stretch; margin-bottom: 2rem; }
+  .main-page .gadget-module .right { grid-template-rows: 1fr 1fr; height: 100%; min-height: 0; grid-auto-rows: 1fr; }
+  .main-page .gadget-module .right > .gadget { height: 100%; min-height: 0; }
   /* Make Local Cuisine gadget span both columns */
-  .gadget-module .gadget.restaurants { grid-column: 1 / -1; }
+  .main-page .gadget-module .gadget.restaurants { grid-column: 1 / -1; }
   
   .main-page .restaurants.container {
     grid-template-columns: 1fr 1fr;
@@ -406,10 +407,10 @@ footer #social-media img { width: 44px; height: auto; }
    ULTRA WIDE VIEW (min-width: 1500px)
    ======================== */
 @media screen and (min-width: 1500px) {
-  /* Search module ultra-wide: slightly increase spacing */
-  .search-module { padding: 18px 24px; }
-  .search-module .filtering-buttons { gap: 12px; }
-  .search-module .filtering-buttons button { height: 40px; padding: 10px 18px; }
+  /* Main page: Search module ultra-wide: slightly increase spacing */
+  .main-page .search-module { padding: 18px 24px; }
+  .main-page .search-module .filtering-buttons { gap: 12px; }
+  .main-page .search-module .filtering-buttons button { height: 40px; padding: 10px 18px; }
   .main-page .destinations.container { grid-template-columns: 1fr 1fr 1fr; }
   .main-page .restaurants.container {
     grid-template-columns: 1fr 1fr 1fr;
