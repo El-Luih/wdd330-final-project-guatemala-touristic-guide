@@ -27,13 +27,16 @@
       content="https://el-luih.github.io/wdd330-final-project-guatemala-touristic-guide/favorites/index.html"
     />
     <link rel="icon" href="/wdd330-final-project-guatemala-touristic-guide/images/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/favorites-Hz4YWL4X.js"></script>
-    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-DBCvD-ly.js">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="/wdd330-final-project-guatemala-touristic-guide/assets/favorites-OxaygdDE.js"></script>
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-CB9drUZY.js">
     <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/preload-helper-b3APuFcS.js">
-    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/RestaurantDetails-DxH_l1Bt.js">
+    <link rel="modulepreload" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/RestaurantDetails-WGc4J2jN.js">
     <link rel="stylesheet" crossorigin href="/wdd330-final-project-guatemala-touristic-guide/assets/util-Do0TevFv.css">
   </head>
   <body>
@@ -42,12 +45,25 @@
     <main class="favorites-page">
       <article class="hero">
         <picture>
-          <source srcset="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-ultrawide.webp" media="(min-width: 1500px)">
-          <source srcset="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-wide.webp" media="(min-width: 800px)">
-          <img src="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-short.webp" alt="A background picture of touristic places and restaurants in Guatemala.">
+          <source
+            srcset="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-ultrawide.webp"
+            media="(min-width: 1500px)"
+          />
+          <source
+            srcset="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-wide.webp"
+            media="(min-width: 800px)"
+          />
+          <img
+            src="/wdd330-final-project-guatemala-touristic-guide/images/heros/favorites-hero-short.webp"
+            alt="A background picture of touristic places and restaurants in Guatemala."
+          />
         </picture>
-        <h1 class="title">Discover Your Preference
-          <span class="flavor">Check the destinations and restaurants you have marked as your favorites before.</span>
+        <h1 class="title">
+          Discover Your Preference
+          <span class="flavor"
+            >Check the destinations and restaurants you have marked as your
+            favorites before.</span
+          >
         </h1>
       </article>
 
@@ -57,7 +73,12 @@
           <!--Spans 2 columns and 1 row.-->
           <label for="searchbar">
             <span class="field-name">Search</span>
-            <input id="searchbar" name="searchbar" type="text" placeholder="Search restaurants...">
+            <input
+              id="searchbar"
+              name="searchbar"
+              type="text"
+              placeholder="Search restaurants..."
+            />
           </label>
 
           <label for="regions">
@@ -74,29 +95,35 @@
             <!--Operation status filters-->
             <legend class="field-name">Status</legend>
             <div class="grid radio">
-
               <label for="all">
                 <span>All</span>
-                <input id="all" name="status" type="radio" value="all" checked>
+                <input
+                  id="all"
+                  name="status"
+                  type="radio"
+                  value="all"
+                  checked
+                />
               </label>
 
               <label for="open">
                 <span>Open</span>
-                <input id="open" name="status" type="radio" value="open">
+                <input id="open" name="status" type="radio" value="open" />
               </label>
 
               <label for="closed">
                 <span>Closed</span>
-                <input id="closed" name="status" type="radio" value="closed">
+                <input id="closed" name="status" type="radio" value="closed" />
               </label>
-
             </div>
           </fieldset>
         </div>
 
         <section class="destinations-module">
           <h2>Destination Results</h2>
-          <a class="explore button" href="../destinations/index.html">Explore</a>
+          <a class="explore button" href="../destinations/index.html"
+            >Explore</a
+          >
           <div class="container">
             <!--
             Displays up to 100 dynamycally generated restaurant cards.
@@ -110,7 +137,7 @@
             -->
           </div>
         </section>
-        
+
         <section class="restaurants-module">
           <h2>Restaurant Results</h2>
           <a class="explore button" href="../cuisine/index.html">Explore</a>
@@ -128,9 +155,8 @@
           </div>
         </section>
       </div>
-
     </main>
-    
+
     <div id="dynamic-footer"></div>
   </body>
 </html>

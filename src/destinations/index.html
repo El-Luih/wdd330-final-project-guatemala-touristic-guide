@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -30,67 +29,91 @@
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="icon" href="/images/favicon.ico" />
     <script src="/scripts/destinations.js" type="module"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="dynamic-header"></div>
     <main class="destinations-page">
-
       <article class="hero">
         <picture>
-          <source srcset="/images/heros/destinations-hero-ultrawide.webp" media="(min-width: 1500px)">
-          <source srcset="/images/heros/destinations-hero-wide.webp" media="(min-width: 800px)">
-          <img src="/images/heros/destinations-hero-short.webp" alt="A background picture of beautiful places in Guatemala.">
+          <source
+            srcset="/images/heros/destinations-hero-ultrawide.webp"
+            media="(min-width: 1500px)"
+          />
+          <source
+            srcset="/images/heros/destinations-hero-wide.webp"
+            media="(min-width: 800px)"
+          />
+          <img
+            src="/images/heros/destinations-hero-short.webp"
+            alt="A background picture of beautiful places in Guatemala."
+          />
         </picture>
-        <h1 class="title">Discover Adventure
-          <span class="flavor">Embrace the legacy of the country's culture, revive its history, and enjoy its beauty.</span>
+        <h1 class="title">
+          Discover Adventure
+          <span class="flavor"
+            >Embrace the legacy of the country's culture, revive its history,
+            and enjoy its beauty.</span
+          >
         </h1>
       </article>
 
       <div class="grid">
         <!--Grid for both the search module and the map-->
         <div class="search-module">
-            <label for="searchbar">
-              <span class="field-name">Search</span>
-              <input id="searchbar" name="searchbar" type="text" placeholder="Search locations...">
-            </label>
+          <label for="searchbar">
+            <span class="field-name">Search</span>
+            <input
+              id="searchbar"
+              name="searchbar"
+              type="text"
+              placeholder="Search locations..."
+            />
+          </label>
 
-            <label for="regions">
-              <span class="field-name">Region</span>
-              <select name="regions" id="regions">
-                <!--
+          <label for="regions">
+            <span class="field-name">Region</span>
+            <select name="regions" id="regions">
+              <!--
                 + Dynamically generated options, one for each region.
                 + Includes an "All Regions" option, selected by default.
                 -->
-              </select>
-            </label>
+            </select>
+          </label>
 
+          <fieldset class="status-filters">
+            <!--Operation status filters-->
+            <legend class="field-name">Status</legend>
+            <div class="grid radio">
+              <label for="all">
+                <span>All</span>
+                <input
+                  id="all"
+                  name="status"
+                  type="radio"
+                  value="all"
+                  checked
+                />
+              </label>
 
-            <fieldset class="status-filters">
-              <!--Operation status filters-->
-              <legend class="field-name">Status</legend>
-              <div class="grid radio">
-                <label for="all">
-                  <span>All</span>
-                  <input id="all" name="status" type="radio" value="all" checked>
-                </label>
+              <label for="open">
+                <span>Open</span>
+                <input id="open" name="status" type="radio" value="open" />
+              </label>
 
-                <label for="open">
-                  <span>Open</span>
-                  <input id="open" name="status" type="radio" value="open">
-                </label>
+              <label for="closed">
+                <span>Closed</span>
+                <input id="closed" name="status" type="radio" value="closed" />
+              </label>
+            </div>
+          </fieldset>
 
-                <label for="closed">
-                  <span>Closed</span>
-                  <input id="closed" name="status" type="radio" value="closed">
-                </label>
-
-              </div>
-            </fieldset>
-
-            <div class="destinations container">
+          <div class="destinations container">
             <!--
             Displays up to 100 dynamycally generated destination cards.
             Each one contains:
