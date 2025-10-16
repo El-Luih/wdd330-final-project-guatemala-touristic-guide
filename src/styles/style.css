@@ -42,6 +42,35 @@ article.hero::after { content: ""; position: absolute; inset: 0; background: var
 article.hero .title { margin: 0; padding: 0 16px; text-align: center; font-size: 2.5rem; z-index: 2; position: relative; }
 article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; }
 
+/* Show more button - general style for all pages */
+.show-more {
+  display: block;
+  width: fit-content;
+  max-width: 100px;
+  height: 28px;
+  padding: 0 10px;
+  margin: 0 auto;
+  font-size: 0.85rem;
+  font-family: var(--primary-font);
+  color: var(--primary-color);
+  background: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, box-shadow 150ms ease;
+}
+
+.show-more:hover,
+.show-more:focus-visible {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  box-shadow: inset 0 0 0 1px var(--secondary-color), inset 0 0 8px var(--secondary-color-30);
+}
+
+.show-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* ========================
 	MAIN PAGE STYLES
 	All rules scoped to .main-page
@@ -197,6 +226,9 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 .destinations-page .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 
+    "map"
+    "search";
   gap: 16px;
   padding: 1rem;
   max-width: 100%;
@@ -205,9 +237,9 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 
 /* Map container */
 .destinations-page .map {
+  grid-area: map;
   width: 100%;
-  height: auto;
-  max-height: 400px;
+  height: 300px;
   background: var(--primary-color);
   border: 1px solid var(--secondary-color);
   box-sizing: border-box;
@@ -215,9 +247,14 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 
 /* Search module in destinations page */
 .destinations-page .search-module {
+  grid-area: search;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .destinations-page .search-module label {
@@ -258,9 +295,40 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 
 .destinations-page .search-module .grid.radio label {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--text-color);
+  font-family: var(--primary-font);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+  min-height: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.destinations-page .search-module .grid.radio label:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* Hide the actual radio input */
+.destinations-page .search-module .grid.radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Style for checked/selected state */
+.destinations-page .search-module .grid.radio input[type="radio"]:checked + span,
+.destinations-page .search-module .grid.radio label:has(input[type="radio"]:checked) {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 /* Results container - single column on mobile */
@@ -270,6 +338,588 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
   gap: 12px;
   max-height: 500px;
   overflow-y: auto;
+}
+
+/* Result cards - destinations and restaurants */
+.destinations-page .result-card {
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  display: grid;
+  gap: 0;
+  cursor: pointer;
+  transition: box-shadow 150ms ease, transform 100ms ease;
+  position: relative;
+}
+
+.destinations-page .result-card:hover {
+  box-shadow: 0 4px 12px rgba(72, 151, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Card media */
+.destinations-page .card-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--primary-color);
+}
+
+.destinations-page .ratio-2x1 {
+  aspect-ratio: 2 / 1;
+}
+
+.destinations-page .ratio-1x1 {
+  aspect-ratio: 1 / 1;
+}
+
+.destinations-page .card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 300ms ease;
+}
+
+.destinations-page .result-card:hover .card-media img {
+  transform: scale(1.05);
+}
+
+/* Card body */
+.destinations-page .card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.destinations-page .card-body h3 {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+/* Card tags */
+.destinations-page .card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.destinations-page .card-tags .tag {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* Card status */
+.destinations-page .card-status {
+  font-size: 0.85rem;
+  color: var(--accent-color-1);
+  font-weight: 500;
+}
+
+/* Card actions */
+.destinations-page .card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(72, 151, 208, 0.2);
+}
+
+.destinations-page .card-actions a {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.destinations-page .card-actions a:hover {
+  color: var(--accent-color-2);
+  text-decoration: underline;
+}
+
+/* Favorite button in cards */
+.destinations-page .fav-button {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.destinations-page .fav-button:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* ========================
+	EVENTS PAGE STYLES
+	All rules scoped to .events-page
+========================= */
+
+/* Event cards grid */
+.events-page .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.events-page .container section {
+  width: 100%;
+}
+
+.events-page .container section h2 {
+  font-family: var(--secondary-font);
+  margin: 16px 0 12px 0;
+  color: var(--text-color);
+}
+
+.events-page .event-card {
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  display: grid;
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  transition: box-shadow 150ms ease, transform 100ms ease;
+}
+
+.events-page .event-card:hover {
+  box-shadow: 0 4px 12px rgba(72, 151, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+.events-page .event-card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.events-page .event-card__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.events-page .event-card__body h3 {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.3rem;
+  color: var(--text-color);
+}
+
+.events-page .event-card__date {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+.events-page .event-card__desc {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.events-page .event-card__status {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 3px;
+  width: fit-content;
+}
+
+.events-page .event-status--upcoming {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+.events-page .event-status--ongoing {
+  background: var(--accent-color-1);
+  color: var(--primary-color);
+}
+
+.events-page .event-status--past {
+  background: var(--accent-color-2);
+  color: var(--primary-color);
+  opacity: 0.8;
+}
+
+/* ========================
+	FAVORITES PAGE STYLES
+	All rules scoped to .favorites-page
+========================= */
+
+.favorites-page .destinations-module,
+.favorites-page .restaurants-module {
+  padding: 16px;
+}
+
+.favorites-page .container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* Reuse result-card styling from destinations page for favorites */
+.favorites-page .result-card {
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  display: grid;
+  gap: 0;
+  cursor: pointer;
+  transition: box-shadow 150ms ease, transform 100ms ease;
+  position: relative;
+}
+
+.favorites-page .result-card:hover {
+  box-shadow: 0 4px 12px rgba(72, 151, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+.favorites-page .card-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--primary-color);
+}
+
+.favorites-page .ratio-2x1 {
+  aspect-ratio: 2 / 1;
+}
+
+.favorites-page .ratio-1x1 {
+  aspect-ratio: 1 / 1;
+}
+
+.favorites-page .card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 300ms ease;
+}
+
+.favorites-page .result-card:hover .card-media img {
+  transform: scale(1.05);
+}
+
+.favorites-page .card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.favorites-page .card-body h3 {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.favorites-page .card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.favorites-page .card-tags .tag {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.favorites-page .card-status {
+  font-size: 0.85rem;
+  color: var(--accent-color-1);
+  font-weight: 500;
+}
+
+.favorites-page .card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(72, 151, 208, 0.2);
+}
+
+.favorites-page .card-actions a {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.favorites-page .card-actions a:hover {
+  color: var(--accent-color-2);
+  text-decoration: underline;
+}
+
+.favorites-page .fav-button {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.favorites-page .fav-button:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* ========================
+	CUISINE PAGE STYLES
+	All rules scoped to .cuisine-page
+========================= */
+
+/* Reuse same structure as destinations page */
+.cuisine-page .grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "map"
+    "search";
+  gap: 16px;
+  padding: 16px;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+.cuisine-page .map {
+  grid-area: map;
+  width: 100%;
+  height: 300px;
+  border: 2px solid var(--secondary-color);
+  box-sizing: border-box;
+}
+
+.cuisine-page .search-module {
+  grid-area: search;
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  padding: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cuisine-page .search-module label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.cuisine-page .search-module .field-name {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-family: var(--secondary-font);
+}
+
+.cuisine-page .search-module input[type="text"],
+.cuisine-page .search-module select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--secondary-color);
+  font-family: var(--primary-font);
+  box-sizing: border-box;
+}
+
+.cuisine-page .search-module fieldset {
+  border: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+}
+
+.cuisine-page .search-module legend {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-family: var(--secondary-font);
+}
+
+.cuisine-page .search-module .grid.radio {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.cuisine-page .search-module .grid.radio label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.cuisine-page .search-module .grid.radio label:hover {
+  background: rgba(72, 151, 208, 0.1);
+}
+
+.cuisine-page .search-module .grid.radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cuisine-page .search-module .grid.radio input[type="radio"]:checked + span,
+.cuisine-page .search-module .grid.radio label:has(input[type="radio"]:checked) {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Results container */
+.cuisine-page .restaurants.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Reuse result-card styling */
+.cuisine-page .result-card {
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  display: grid;
+  gap: 0;
+  cursor: pointer;
+  transition: box-shadow 150ms ease, transform 100ms ease;
+  position: relative;
+}
+
+.cuisine-page .result-card:hover {
+  box-shadow: 0 4px 12px rgba(72, 151, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+.cuisine-page .card-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--primary-color);
+}
+
+.cuisine-page .ratio-2x1 {
+  aspect-ratio: 2 / 1;
+}
+
+.cuisine-page .ratio-1x1 {
+  aspect-ratio: 1 / 1;
+}
+
+.cuisine-page .card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 300ms ease;
+}
+
+.cuisine-page .result-card:hover .card-media img {
+  transform: scale(1.05);
+}
+
+.cuisine-page .card-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cuisine-page .card-body h3 {
+  margin: 0;
+  font-family: var(--secondary-font);
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.cuisine-page .card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cuisine-page .card-tags .tag {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.cuisine-page .card-status {
+  font-size: 0.85rem;
+  color: var(--accent-color-1);
+  font-weight: 500;
+}
+
+.cuisine-page .card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(72, 151, 208, 0.2);
+}
+
+.cuisine-page .card-actions a {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.cuisine-page .card-actions a:hover {
+  color: var(--accent-color-2);
+  text-decoration: underline;
+}
+
+.cuisine-page .fav-button {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.cuisine-page .fav-button:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 /* Fade-in animation for hero title and flavor */
@@ -490,7 +1140,7 @@ footer #social-media img { width: 44px; height: auto; }
   .destinations-page .grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
     grid-template-areas: "search map"; /* search gets 1fr, map gets 2fr */
-    align-items: start;
+    align-items: stretch;
     gap: 16px;
   }
   
@@ -498,13 +1148,14 @@ footer #social-media img { width: 44px; height: auto; }
     grid-area: search;
     min-width: 0;
     max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   .destinations-page .map {
     grid-area: map;
     width: 100%;
-    height: auto;
-    max-height: none;
+    height: 100%;
     min-height: 500px;
     min-width: 0;
     max-width: 100%;
@@ -523,6 +1174,62 @@ footer #social-media img { width: 44px; height: auto; }
     overflow-y: auto;
     grid-template-columns: 1fr; /* single column even on desktop */
   }
+  
+  /* Events page: two-column grid on desktop */
+  .events-page .container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .events-page .event-card {
+    grid-template-columns: 250px 1fr;
+  }
+  
+  .events-page .event-card__image {
+    height: 100%;
+    min-height: 200px;
+  }
+  
+  /* Favorites page: two-column grid on desktop */
+  .favorites-page .container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  /* Cuisine page: two-column layout - search module left (1fr), map right (2fr) */
+  .cuisine-page .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-areas: "search map";
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .cuisine-page .search-module {
+    grid-area: search;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cuisine-page .map {
+    grid-area: map;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .cuisine-page .restaurants.container {
+    flex: 1;
+    overflow-y: auto;
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ========================
@@ -536,6 +1243,26 @@ footer #social-media img { width: 44px; height: auto; }
   .main-page .destinations.container { grid-template-columns: 1fr 1fr 1fr; }
   .main-page .restaurants.container {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  /* Destinations page: ultra-wide layout - search module 1fr, map 3fr */
+  .destinations-page .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  }
+  
+  /* Events page: three-column grid on ultra-wide */
+  .events-page .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Favorites page: three-column grid on ultra-wide */
+  .favorites-page .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Cuisine page: ultra-wide layout - search module 1fr, map 3fr */
+  .cuisine-page .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   }
 }
 

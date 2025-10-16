@@ -145,11 +145,12 @@ function selectRegion(region) {
 
 function setupSearch() {
 	const input = document.querySelector('#searchbar');
-	input.addEventListener('input', debounce(() => applyFilters(), 300));
+	if (input) {
+		input.addEventListener('input', debounce(() => applyFilters(), 300));
+	}
 	// status radio buttons
 	document.querySelectorAll('input[name="status"]').forEach(r => r.addEventListener('change', () => {
-		const region = document.querySelector('.filter-button.active')?.dataset.region || 'All';
-		applyFilters(region, r.value);
+		applyFilters();
 	}));
 }
 
@@ -158,8 +159,15 @@ function initMap() {
 	mapHelpers = GoogleMapsAPI.initMap(mapEl, DEFAULT_COUNTRY_VIEW);
 }
 
-function applyFilters(region = 'All', status = 'all') {
+function applyFilters() {
 	const q = document.querySelector('#searchbar')?.value?.toLowerCase()?.trim();
+	// Get current region from select dropdown
+	const regionSelect = document.querySelector('#regions');
+	const region = regionSelect ? regionSelect.value : 'All';
+	// Get current status from radio buttons
+	const statusRadio = document.querySelector('input[name="status"]:checked');
+	const status = statusRadio ? statusRadio.value : 'all';
+	
 	// operate on the region-scoped currentResults which were fetched on page load
 	let list = [...currentResults];
 	if (region && region !== 'All') list = list.filter(p => p.region === region);
@@ -180,13 +188,55 @@ function applyFilters(region = 'All', status = 'all') {
 	// fetched region-scoped and limited to 18 by the server-side call.
 	const GLOBAL_CAP = 18;
 	let prioritized = list.slice(0, GLOBAL_CAP);
-	currentResults = prioritized;
-	renderResults();
+	// Don't overwrite currentResults - use a filtered copy for rendering
+	renderFilteredResults(prioritized);
 }
 
 function clearResults() {
 	const container = document.querySelector('.destinations.container');
 	if (container) container.innerHTML = '';
+}
+
+function renderFilteredResults(filteredList) {
+	clearResults();
+	const container = document.querySelector('.destinations.container');
+	mapHelpers.clearMarkers();
+	const start = 0;
+	currentPage = 0;
+	const end = Math.min(filteredList.length, PAGE_SIZE);
+	const pageItems = filteredList.slice(start, end);
+	
+	// render the first page using the shared card creator
+	pageItems.forEach((p) => {
+		const card = createAttractionCard(p, { mapHelpers });
+		container.appendChild(card);
+		// Add marker to map
+		if (p.location) {
+			mapHelpers.addMarker(p.placeId, { lat: p.location.lat, lng: p.location.lng }, { title: p.name, onClick: () => {
+				// clicking marker should focus the card (scroll into view)
+				const el = container.querySelector(`[data-place-id='${p.placeId}']`);
+				if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				mapHelpers.highlightMarker(p.placeId, { bounce: true });
+			}});
+		}
+	});
+
+	// Note: Simplified for filtered results - no show more button for now
+	// Show more would need to work with the filtered list
+
+	// Center map to show current results
+	if (filteredList.length === 0) {
+		mapHelpers.setView(DEFAULT_COUNTRY_VIEW);
+	} else if (filteredList.length === 1) {
+		const p = filteredList[0];
+		if (p.location) mapHelpers.setView({ lat: p.location.lat, lng: p.location.lng, zoom: 14 });
+	} else {
+		// center on selected region or country view
+		const regionSelect = document.querySelector('#regions');
+		const activeRegion = regionSelect ? regionSelect.value : 'All';
+		if (activeRegion && activeRegion !== 'All') mapHelpers.setView(activeRegion);
+		else mapHelpers.setView(DEFAULT_COUNTRY_VIEW);
+	}
 }
 
 function renderResults() {
