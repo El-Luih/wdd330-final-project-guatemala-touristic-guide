@@ -20,13 +20,13 @@
 /*MOBILE VIEW*/
 
 /* Global typography: primary font by default, secondary for headings/titles */
-html, body { font-family: var(--primary-font); color: var(--text-color); }
+html, body { font-family: var(--primary-font); color: var(--text-color); margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
 h1, h2, h3, h4, h5, h6, .title, .heading { font-family: var(--secondary-font); }
 
 /* Hero: full-bleed background image with overlay and centered content */
 article.hero {
   position: relative;
-  width: 100%; /* never exceed viewport width */
+  width: 100%;
   left: 50%;
   transform: translateX(-50%);
   overflow: hidden;
@@ -187,6 +187,90 @@ article.hero .title .flavor { display: block; font-size: 1rem; margin-top: 8px; 
 .main-page .gadget.weather #weather-0 h4,
 .main-page .gadget.weather #weather-1 h4,
 .main-page .gadget.weather #weather-2 h4 { margin: 0; }
+
+/* ========================
+	DESTINATIONS PAGE STYLES
+	All rules scoped to .destinations-page
+========================= */
+
+/* Mobile: single column layout - map then search */
+.destinations-page .grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  padding: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Map container */
+.destinations-page .map {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  background: var(--primary-color);
+  border: 1px solid var(--secondary-color);
+  box-sizing: border-box;
+}
+
+/* Search module in destinations page */
+.destinations-page .search-module {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.destinations-page .search-module label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.destinations-page .search-module .field-name {
+  font-family: var(--secondary-font);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.destinations-page .search-module input[type="text"],
+.destinations-page .search-module select {
+  font-family: var(--primary-font);
+  padding: 8px 12px;
+  border: 1px solid var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--text-color);
+}
+
+.destinations-page .search-module fieldset {
+  border: 1px solid var(--secondary-color);
+  padding: 8px 12px;
+}
+
+.destinations-page .search-module legend {
+  padding: 0 8px;
+}
+
+.destinations-page .search-module .grid.radio {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.destinations-page .search-module .grid.radio label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Results container - single column on mobile */
+.destinations-page .destinations.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+}
 
 /* Fade-in animation for hero title and flavor */
 @keyframes heroFadeIn {
@@ -401,6 +485,44 @@ footer #social-media img { width: 44px; height: auto; }
   footer #contact-info { justify-self: start; text-align: left; }
   footer #social-media { justify-self: center; align-self: center; }
   footer #creation-info { justify-self: end; text-align: right; }
+  
+  /* Destinations page: two-column layout - search module left (1fr), map right (2fr) */
+  .destinations-page .grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-areas: "search map"; /* search gets 1fr, map gets 2fr */
+    align-items: start;
+    gap: 16px;
+  }
+  
+  .destinations-page .search-module {
+    grid-area: search;
+    min-width: 0;
+    max-width: 100%;
+  }
+  
+  .destinations-page .map {
+    grid-area: map;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    min-height: 500px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .destinations-page .search-module {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Make results container fill remaining space and scroll */
+  .destinations-page .destinations.container {
+    flex: 1;
+    overflow-y: auto;
+    grid-template-columns: 1fr; /* single column even on desktop */
+  }
 }
 
 /* ========================
